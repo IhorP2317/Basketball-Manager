@@ -1,1 +1,27 @@
-/* You can add global styles to this file, and also import other style files */
+h1{
+  font-size: 55px;
+}
+
+@import 'custom-theme.scss';
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.button-primary {
+  background-color: #004d00 !important;
+  color: #F0FDEE !important;
+}
+
+.button-secondary {
+  background-color: #F0FDEE !important;
+  color: #004d00 !important;
+}
+a{
+  text-decoration: none;
+  color: inherit;
+}
+

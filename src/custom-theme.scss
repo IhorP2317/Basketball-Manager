@@ -1,0 +1,83 @@
+@use '@angular/material' as mat;
+
+// Manually define your custom palettes
+$app-primary: (
+  50: #e8f5e9,
+  100: #c8e6c9,
+  200: #a5d6a7,
+  300: #81c784,
+  400: #66bb6a,
+  500: #4caf50,
+  600: #43a047,
+  700: #388e3c,
+  800: #2e7d32,
+  900: #1b5e20,
+  A100: #b9f6ca,
+  A200: #69f0ae,
+  A400: #00e676,
+  A700: #00c853,
+  contrast: (
+    50: #000000,
+    100: #000000,
+    200: #000000,
+    300: #000000,
+    400: #ffffff,
+    500: #ffffff,
+    600: #ffffff,
+    700: #ffffff,
+    800: #ffffff,
+    900: #ffffff,
+    A100: #000000,
+    A200: #000000,
+    A400: #000000,
+    A700: #000000,
+  ),
+  default: #004d00,
+  lighter: #2e7d32,
+  darker: #003300,
+  text: #ffffff
+);
+
+$app-secondary: (
+  500: #F0FDEE,
+  contrast: (
+    500: #000000,
+  ),
+  default: #F0FDEE,
+  lighter: #ffffff,
+  darker: #cbecc4,
+  text: #000000
+);
+$app-tertiary: (
+  500: #FFCC80,
+  contrast: (
+    500: #000000,
+  ),
+  default: #FFCC80,
+  lighter: #FFE0B2,
+  darker: #FFA726,
+  text: #000000
+);
+
+$app-warn: (
+  500: #9999CC,
+  contrast: (
+    500: #000000,
+  ),
+  default: #9999CC,
+  lighter: #c2c2f0,
+  darker: #70709b,
+  text: #000000
+);
+
+// Create the theme
+$app-theme: mat.define-light-theme((
+  color: (
+    primary: $app-primary,
+    accent: $app-secondary,
+    warn: $app-tertiary,
+  )
+));
+
+// Include component themes
+@include mat.all-component-themes($app-theme);

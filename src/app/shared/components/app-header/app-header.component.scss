@@ -1,0 +1,45 @@
+.header {
+  background: linear-gradient(to right, #004d00, #2e7d32);
+  display: flex;
+  padding: 0 20px;
+  align-items: center;
+  flex-grow: 1;
+
+  .header-content {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    flex-grow: 1;
+
+    .platform-name {
+      font-size: 24px;
+    }
+
+    span {
+      color: #fff;
+      margin: 10px;
+      font-weight: 100;
+      text-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      padding: 0 10px;
+      line-height: 1.5;
+    }
+
+    .header-content-user {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 25px;
+
+      .custom-icon {
+        fill: #ffffff;
+        width: 40px;
+        height: 40px;
+      }
+
+      .fa-user-circle {
+        color: white;
+        font-size: 24px;
+      }
+    }
+  }
+}

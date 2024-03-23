@@ -1,0 +1,17 @@
+.matches-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .matches-headers {
+    display: grid;
+    grid-template-columns: 248px 248px 248px 12px 248px 248px 248px;
+    align-items: center;
+    color: #FFFFFF;
+    .match-header {
+      font-size: 18px;
+    }
+  }
+
+
+}
