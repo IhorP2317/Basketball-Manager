@@ -1,0 +1,61 @@
+ @import '../../../../../variables';
+
+ .match-time {
+    display: flex;
+    flex-direction: column;
+
+    .match-date {
+      font-weight: bold;
+    }
+
+    .match-hour {
+      color: #666;
+    }
+  }
+  .match-location {
+    white-space: normal;
+    overflow: hidden;
+  }
+
+  .match-competition, .match-stadium {
+    padding: 0 15px;
+  }
+
+  .match-team {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+    span {
+      white-space: normal;
+      overflow: hidden;
+    }
+
+    .match-logo {
+      width: 50px;
+      height: 50px;
+    }
+  }
+
+  .match-versus {
+    font-weight: bold;
+    text-align: center;
+    font-size: 20px;
+  }
+  .match-score{
+    font-weight: bold;
+    text-align: center;
+  }
+  match-action {
+    align-items: center;
+    justify-content: center;
+  }
+  match-operations{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+
+  }
+

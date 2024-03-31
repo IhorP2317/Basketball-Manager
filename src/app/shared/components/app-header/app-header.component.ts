@@ -7,7 +7,7 @@ import { DomSanitizer } from '@angular/platform-browser';
   styleUrl: './app-header.component.scss'
 })
 export class AppHeaderComponent {
-  public platformName: string = 'B-Ball Data';
+  public platformName: string = 'B - BALL DATA';
   constructor(
     private matIconRegistry: MatIconRegistry,
     private domSanitizer: DomSanitizer

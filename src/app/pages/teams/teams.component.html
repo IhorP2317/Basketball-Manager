@@ -1,1 +1,49 @@
-<p>teams works!</p>
+<div class="teams-list-container">
+  <h1 class="page-head">TEAMS</h1>
+  <div class="team-app-filters">
+    <div class="search-container">
+      <mat-form-field class="full-width-input" appearance="outline">
+      <input
+        matInput
+        placeholder="Search a team"
+        type="text"
+        [(ngModel)]="selectedTeam"
+        (ngModelChange)="onSearchTeamChanged()"
+      />
+        </mat-form-field>
+      <div class="add-button-container">
+        <button
+          mat-icon-button
+          aria-label="Create new team"
+          class="add-button"
+          matTooltip="Create new team"
+        >
+          <mat-icon>add_circle_outline</mat-icon>
+        </button>
+      </div>
+    </div>
+  </div>
+<div class = "no-found-container">
+  <ng-container
+    *ngIf="teamsPagedList | async as teamsPagedList; else noTeamsTemplate"
+  >
+    <div class="teams-list">
+      <div *ngFor="let team of teamsPagedList.items">
+        <app-team-item [team]="team" (deleteRequest)="onDeleteMatchClicked($event)"></app-team-item>
+      </div>
+    </div>
+    <app-paginator
+      class="teams-paginator"
+      *ngIf="teamsPagedList.items.length >= 1"
+      [isDarkBackground]="false"
+      [length]="teamsPagedList.totalCount"
+      [pageIndex]="teamsPagedList.page - 1"
+      [pageSize]="teamsPagedList.pageSize"
+      (pageChangedEvent)="onPageChangedEvent($event)"
+    />
+  </ng-container>
+  <ng-template #noTeamsTemplate>
+    <P CLASS="main-text dark">TEAMS NOT FOUND</P>
+  </ng-template>
+</div>
+</div>

@@ -1,1 +1,15 @@
-<p>matches-list works!</p>
+<div class="match-list-container">
+  <p class="head-type">{{listHeader}}</p>
+  <div class="table-headers match-table-template">
+    <p class="table-header">TIME</p>
+    <p class="table-header">LOCATION</p>
+    <p class="table-header">HOME TEAM</p>
+    <p></p>
+    <p class="table-header">AWAY TEAM</p>
+    <p class="table-header">SCORE</p>
+    <p class="table-header"></p>
+    <p class="table-header">OPERATIONS</p>
+  </div>
+  <match-item *ngFor="let match of matches" [match]="match" (deleteRequest)="onDeleteRequested($event)" ></match-item>
+</div>
+

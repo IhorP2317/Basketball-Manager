@@ -1,17 +1,29 @@
-.matches-content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+@import '../../../variables.scss';
+    .date-navigation {
+      position: absolute;
+      left: calc(50% - 106px);
+      display: flex;
+      align-items: center;
 
-  .matches-headers {
-    display: grid;
-    grid-template-columns: 248px 248px 248px 12px 248px 248px 248px;
-    align-items: center;
-    color: #FFFFFF;
-    .match-header {
-      font-size: 18px;
+      justify-content: center;
+      .date-info {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        .month {
+          font-size: 16px;
+        }
+
+        .year {
+          font-size: 24px;
+        }
+      }
+
+     .month-button {
+        margin: 0 15px;
+      }
+
     }
-  }
 
 
-}

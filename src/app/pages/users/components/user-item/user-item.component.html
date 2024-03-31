@@ -1,0 +1,16 @@
+<div class="item-container user-table-template">
+  <div class="user-column">
+    <img class="user-logo" [src]="user?.photoPath" [alt]="user?.firstName + ' ' + user?.lastName">
+    <span class="user-full-name">{{ user?.firstName + ' ' + user?.lastName}}</span>
+  </div>
+  <div class="user-email">{{ user!.email }}</div>
+  <div class="user-balance">{{user?.balance}}</div>
+  <div class="user-role">{{user?.role}}</div>
+  <div class="user-creation-time">{{user?.createdTimestamp | date: 'dd/MM/yyyy HH:mm:ss'}}</div>
+  <div class="item-operations">
+    <button mat-icon-button aria-label="Edit user" class="edit-button" matTooltip="Edit user">
+      <mat-icon>edit</mat-icon></button>
+    <button mat-icon-button aria-label="Delete user" class="delete-button" matTooltip="Delete user">
+      <mat-icon>delete</mat-icon></button>
+  </div>
+</div>

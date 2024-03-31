@@ -1,0 +1,89 @@
+<div class="page-content">
+  <mat-card class="auth-card">
+    <mat-card-content>
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+        <h1>Login</h1>
+
+        <p *ngIf="errorMessage != null">{{ errorMessage }}</p>
+
+        <mat-form-field class="full-width" appearance="outline">
+          <mat-label>Email</mat-label>
+          <input
+            matInput
+            placeholder="example@gmail.com"
+            type="email"
+            formControlName="email"
+          />
+
+          <mat-error
+            *ngIf="
+              getFormControl('email')?.dirty || getFormControl('email')?.touched
+            "
+          >
+            <span *ngIf="getFormControl('email')?.hasError('required')"
+              >Email is <strong>required</strong></span
+            >
+            <span *ngIf="getFormControl('email')?.hasError('email')"
+              >Please enter a valid email</span
+            >
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="full-width" appearance="outline">
+          <mat-label>Password</mat-label>
+          <input
+            matInput
+            [type]="hidePassword ? 'password' : 'text'"
+            placeholder="Password"
+            formControlName="password"
+          />
+
+          <button
+            mat-icon-button
+            matSuffix
+            (click)="hidePassword = !hidePassword"
+            [attr.aria-label]="'Hide password'"
+            [attr.aria-pressed]="hidePassword"
+            type="button"
+          >
+            <mat-icon>{{
+              hidePassword ? "visibility_off" : "visibility"
+            }}</mat-icon>
+          </button>
+          <mat-error
+            *ngIf="
+              getFormControl('password')?.dirty ||
+              getFormControl('password')?.touched
+            "
+          >
+            <span *ngIf="getFormControl('password')?.hasError('required')"
+              >Password is <strong>required</strong></span
+            >
+            <span *ngIf="getFormControl('password')?.hasError('pattern')"
+              >Please enter a valid password</span
+            >
+          </mat-error>
+        </mat-form-field>
+
+        <button
+          class="full-width button-primary"
+          mat-raised-button
+          type="submit"
+        >
+          Login
+        </button>
+
+        <div class="hints">
+          <p>
+            Don't have an account?
+            <a class="custom-link" routerLink="/sign-up">Sign up</a>
+          </p>
+          <p>
+            Forgot your password?
+            <a class="custom-link" routerLink="/admin">Reset</a>
+          </p>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>

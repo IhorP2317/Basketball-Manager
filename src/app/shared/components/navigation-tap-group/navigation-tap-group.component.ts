@@ -7,10 +7,9 @@ import { Component } from '@angular/core';
 })
 export class NavigationTapGroupComponent {
   navLinks = [
-    { path: '/matches', label: 'Matches' },
-    { path: '/teams', label: 'Teams' },
-    { path: '/players', label: 'Players' },
-    { path: '/users', label: 'Users' }
+    { path: '/matches', label: 'MATCHES' },
+    { path: '/teams', label: 'TEAMS' },
+    { path: '/players', label: 'PLAYERS' },
+    { path: '/users', label: 'USERS' }
   ];
-  activeLink = this.navLinks[0];
 }

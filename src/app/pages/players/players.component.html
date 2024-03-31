@@ -1,1 +1,74 @@
-<p>players works!</p>
+<div class="head-with-filters">
+  <h1 class="page-head">PLAYERS</h1>
+  <div class="app-filters">
+    <div class="select-filters">
+      <mat-form-field appearance="fill">
+        <mat-label>Choose a team</mat-label>
+        <mat-select>
+          <mat-option
+            *ngFor="let teamName of teamNames"
+            [value]="teamName.value"
+          >
+            {{ teamName.value }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>Choose a position</mat-label>
+        <mat-select>
+          <mat-option
+            *ngFor="let position of positions"
+            [value]="position.value"
+          >
+            {{ position.value }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+  <div class ="search-container">
+  <mat-form-field class="full-width-input" appearance="outline">
+    <input matInput placeholder="Search a player" type="text" >
+  </mat-form-field>
+  <button mat-icon-button class="button-primary">
+    <mat-icon>search</mat-icon>
+  </button>
+  </div>
+    <div class="add-button-container">
+      <button
+        mat-icon-button
+        aria-label="Create a new player"
+        class="add-button"
+        matTooltip="Create a new player"
+      >
+        <mat-icon>add_circle_outline</mat-icon>
+      </button>
+    </div>
+</div>
+
+</div>
+
+<div class="item-list-container">
+  <div class="table-headers player-table-template">
+    <p class="table-header">PLAYER</p>
+    <p class="table-header">TEAM</p>
+    <p class="table-header">JERSEY NUMBER</p>
+    <p class="table-header">POSITION</p>
+    <p class="table-header">HEIGHT</p>
+    <p class="table-header">WEIGHT</p>
+    <p class="table-header">BIRTH DATE</p>
+    <p class="table-header">COUNTRY</p>
+    <p class="table-header"></p>
+  </div>
+  <app-player-item *ngFor="let player of pagedPlayerList.items" [player]="player"></app-player-item>
+  <app-paginator
+    *ngIf="pagedPlayerList.items !== null"
+    [isDarkBackground] ="true"
+    [length]="pagedPlayerList.totalCount"
+    [pageIndex]="pagedPlayerList.page - 1"
+    [pageSize]="pagedPlayerList.pageSize"
+    (pageChangedEvent)="onPageChangedEvent($event)"
+  />
+</div>
+</div>
+
+

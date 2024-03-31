@@ -1,1 +1,78 @@
-<div class="matches-content"><h1>Schedule</h1></div>
+
+<div class="head-with-filters">
+  <h1 class="page-head">SCHEDULE</h1>
+  <div class="app-filters">
+    <div class="select-filters">
+      <mat-form-field appearance="fill">
+        <mat-label>Choose a team</mat-label>
+        <mat-select [(ngModel)]="selectedTeam" name="team" (selectionChange)="onSelectedTeamChange()">
+          <mat-option value="All teams">All teams</mat-option>
+          <mat-option *ngFor="let team of selectTeams | async" [value]="team.name">{{ team.name }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>Choose a year</mat-label>
+        <mat-select [(ngModel)]="selectedYear" name="year" (selectionChange)="onSelectYearChange()">
+          <mat-option *ngFor="let year of selectYears | async" [value]="year">{{ year }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <ng-container *ngIf="filters | async as filters">
+    <div class="date-navigation">
+      <button mat-icon-button class="month-button" (click)="onPreviousMonthClicked()">
+        <mat-icon>chevron_left</mat-icon>
+      </button>
+      <div class="date-info">
+        <div class="month">{{   filters.month | monthName }}</div>
+        <div class="year">{{ filters.year}}</div>
+      </div>
+      <button mat-icon-button class="month-button" (click)="onNextMonthClicked()">
+        <mat-icon>chevron_right</mat-icon>
+      </button>
+    </div>
+     </ng-container>
+    <div class="add-button-container">
+      <button
+        mat-icon-button
+        aria-label="Create new match"
+        class="add-button"
+        matTooltip="Create New Match"
+      >
+        <mat-icon>add_circle_outline</mat-icon>
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="item-list-container">
+  <ng-container *ngIf="matchesPagedList | async as matchesPagedList; else noMatchesTemplate">
+    <matches-list
+      *ngIf="(matchesPagedList.items | filterMatches:'Scheduled').length > 0"
+      [matches]="matchesPagedList.items | filterMatches:'Scheduled'"
+      [listHeader]="'NEXT GAMES'"
+      (deleteMatch)="onDeleteMatchClicked($event)"
+    ></matches-list>
+
+    <matches-list
+      *ngIf="(matchesPagedList.items | filterMatches:'Scheduled':true).length > 0"
+      [matches]="matchesPagedList.items | filterMatches:'Scheduled':true"
+      [listHeader]="'RESULT'"
+      (deleteMatch)="onDeleteMatchClicked($event)"
+
+    ></matches-list>
+
+    <app-paginator
+      *ngIf="matchesPagedList.items && matchesPagedList.items.length > 0"
+      [isDarkBackground]="true"
+      [length]="matchesPagedList.totalCount"
+      [pageIndex]="matchesPagedList.page - 1"
+      [pageSize]="matchesPagedList.pageSize"
+      (pageChangedEvent)="onPageChangedEvent($event)"
+    />
+  </ng-container>
+
+  <ng-template #noMatchesTemplate>
+    <p class="main-text white">NO GAMES SCHEDULED</p>
+  </ng-template>
+</div>
+

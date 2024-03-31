@@ -1,0 +1,63 @@
+<div class="item-container match-table-template">
+  <div class="match-time">
+    <span class="match-date">{{ match | matchTime }}</span>
+  </div>
+  <div class="match-location">{{ match!.location }}</div>
+  <div class="match-team home-team">
+    <img
+      class="match-logo"
+      [src]="getImageSrc(match!.homeTeamId, 'home')"
+      (error)="onError($event, 'home')"
+      alt="{{ match?.homeTeamName }}"
+    />
+    <span>{{ match?.homeTeamName }}</span>
+  </div>
+  <div class="match-versus">VS</div>
+  <div class="match-team away-team">
+    <img
+      class="match-logo"
+      [src]="getImageSrc(match!.awayTeamId, 'away')"
+      (error)="onError($event, 'away')"
+      alt="{{ match?.awayTeamName }}"
+    />
+    <span>{{ match?.awayTeamName }}</span>
+  </div>
+  <div class="match-score">
+    {{ match | matchScore }}
+  </div>
+  <div class="match-actions">
+    <button
+      *ngIf="match?.status !== 'Completed'"
+      mat-raised-button
+      class="button-primary"
+    >
+      Show tickets
+    </button>
+    <button
+      *ngIf="match?.status === 'Completed'"
+      mat-raised-button
+      class="button-primary"
+    >
+      Show statistics
+    </button>
+  </div>
+  <div class="item-operations">
+    <button
+      mat-icon-button
+      aria-label="Edit match"
+      class="edit-button"
+      matTooltip="Edit Match"
+    >
+      <mat-icon>edit</mat-icon>
+    </button>
+    <button
+      mat-icon-button
+      aria-label="Delete match"
+      class="delete-button"
+      (click)="onDeleteClicked()"
+      matTooltip="Delete Match"
+    >
+      <mat-icon>delete</mat-icon>
+    </button>
+  </div>
+</div>

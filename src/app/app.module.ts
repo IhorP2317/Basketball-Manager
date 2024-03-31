@@ -5,6 +5,9 @@ import { AppRoutingModule } from './app-routing.module';
 import {MatIconModule} from '@angular/material/icon';
 import { AppComponent } from './app.component';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import {environment} from "../environments/environment";
+import {DatePipe} from "@angular/common";
+import {HttpClientModule} from "@angular/common/http";
 
 
 
@@ -19,10 +22,20 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
     BrowserModule,
     AppRoutingModule,
     SharedComponentsModule,
-    MatIconModule
+    MatIconModule,
+    HttpClientModule
   ],
   providers: [
-    provideAnimationsAsync()
+    provideAnimationsAsync(),
+    {
+      provide:'apiUrl',
+      useValue: environment.apiUrl,
+    },
+    {
+      provide:'securityUrl',
+      useValue: environment.securityUrl,
+    },
+    DatePipe,
   ],
   bootstrap: [AppComponent]
 })

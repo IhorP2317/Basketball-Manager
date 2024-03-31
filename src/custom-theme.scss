@@ -58,24 +58,24 @@ $app-tertiary: (
   darker: #FFA726,
   text: #000000
 );
-
 $app-warn: (
-  500: #9999CC,
+  500: #FF5252,
   contrast: (
-    500: #000000,
+    500: #FFFFFF,
   ),
-  default: #9999CC,
-  lighter: #c2c2f0,
-  darker: #70709b,
-  text: #000000
+  default: #FF5252,
+  lighter: #FF7B7B,
+  darker: #FF0000,
+  text: #FFFFFF
 );
+
 
 // Create the theme
 $app-theme: mat.define-light-theme((
   color: (
     primary: $app-primary,
     accent: $app-secondary,
-    warn: $app-tertiary,
+    warn: $app-warn,
   )
 ));
 

@@ -7,11 +7,17 @@ import {RouterLink, RouterLinkActive, RouterOutlet} from "@angular/router";
 import {MatButtonModule} from "@angular/material/button";
 import {MatIconModule} from "@angular/material/icon";
 import {MatTabsModule} from "@angular/material/tabs";
+import { PaginatorComponent } from './paginator/paginator.component';
+import {MatPaginator} from "@angular/material/paginator";
+import { ConfirmationDialogComponent } from './dialog/confirmation-dialog.component';
+import {MatDialogModule} from "@angular/material/dialog";
 
 @NgModule({
   declarations: [
     AppHeaderComponent,
-    NavigationTapGroupComponent
+    NavigationTapGroupComponent,
+    PaginatorComponent,
+    ConfirmationDialogComponent,
   ],
   imports: [
     CommonModule,
@@ -21,12 +27,14 @@ import {MatTabsModule} from "@angular/material/tabs";
     MatButtonModule,
     MatIconModule,
     MatTabsModule,
-    RouterOutlet
+    RouterOutlet,
+    MatPaginator,
+    MatDialogModule
   ],
   exports: [
     AppHeaderComponent,
-    NavigationTapGroupComponent
-  ]
+    NavigationTapGroupComponent,
+    PaginatorComponent,
+  ],
 })
-export class SharedComponentsModule {
-}
+export class SharedComponentsModule {}
