@@ -3,7 +3,7 @@ import moment from 'moment';
 import { PagedListConfiguration } from '../../core/interfaces/paged-list/paged-list-configuration.dto';
 import { MatchesPageService } from './services/matches.page.service';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { map } from 'rxjs';
+import { filter } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogData } from '../../core/interfaces/dialog/dialog-data';
 import { ConfirmationDialogComponent } from '../../shared/components/dialog/confirmation-dialog.component';
@@ -25,6 +25,7 @@ export class MatchesComponent implements OnInit {
   selectedTeam = 'All teams';
   selectYears = this.matchesPageService.yearsFilters$.pipe((years) => years);
   selectTeams = this.matchesPageService.teams$.pipe((teams) => teams);
+
   constructor(
     private matchesPageService: MatchesPageService,
     public dialog: MatDialog,
@@ -33,6 +34,7 @@ export class MatchesComponent implements OnInit {
   ngOnInit() {
     this.subscribeToFilterChanges();
   }
+
   private subscribeToFilterChanges() {
     this.matchesPageService.filters$
       .pipe(untilDestroyed(this))
@@ -51,23 +53,27 @@ export class MatchesComponent implements OnInit {
     const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
       data: dialogData,
     });
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result) {
-        this.matchesPageService.deleteMatch(matchId);
-      }
-    });
+    dialogRef
+      .afterClosed()
+      .pipe(
+        filter((result) => result),
+        untilDestroyed(this),
+      )
+      .subscribe(() => this.matchesPageService.deleteMatch(matchId));
   }
+
   onSelectYearChange() {
     this.matchesPageService.setSelectedYear(this.selectedYear);
   }
+
   onSelectedTeamChange() {
-    if(this.selectedTeam === 'All teams') {
+    if (this.selectedTeam === 'All teams') {
       this.matchesPageService.setSelectedTeam(null);
     } else {
       this.matchesPageService.setSelectedTeam(this.selectedTeam);
     }
-
   }
+
   onPreviousMonthClicked() {
     this.matchesPageService.setPreviousMonth();
   }

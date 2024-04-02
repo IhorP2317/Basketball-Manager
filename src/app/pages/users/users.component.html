@@ -1,28 +1,33 @@
 <div class="head-with-filters">
   <h1 class="page-head">USERS</h1>
   <div class="app-filters">
-    <div class="select-filters">
-      <mat-form-field appearance="fill">
-        <mat-label>Choose a role</mat-label>
-        <mat-select>
-          <mat-option
-            *ngFor="let role of roles"
-            [value]="role.value"
-          >
-            {{ role.value }}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-    </div>
+    <form [formGroup]="usersFiltersForm">
+      <div class="select-filters">
+        <mat-form-field appearance="fill">
+          <mat-label>Choose a role</mat-label>
+          <mat-select formControlName="role" (selectionChange)="onSelectedRoleChange()">
+            <mat-option *ngFor="let role of roles" [value]="role.value">
+              {{ role.value }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>Choose an email status</mat-label>
+          <mat-select formControlName="emailStatus" (selectionChange)="onSelectedStatusChange()">
+            <mat-option *ngFor="let status of statuses" [value]="status.value">
+              {{ status.value }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
 
-    <div class ="search-container">
-      <mat-form-field class="full-width-input" appearance="outline">
-        <input matInput placeholder="Search a user" type="text" >
-      </mat-form-field>
-      <button mat-icon-button class="button-primary">
-        <mat-icon>search</mat-icon>
-      </button>
-    </div>
+      <div class="search-container">
+        <mat-form-field class="full-width-input" appearance="outline">
+          <input matInput placeholder="Search a user" formControlName="searchUser" (input)="onSearchedUserChange()"
+                 type="text">
+        </mat-form-field>
+      </div>
+    </form>
     <div class="add-button-container">
       <button
         mat-icon-button
@@ -34,26 +39,54 @@
       </button>
     </div>
   </div>
-
 </div>
 
+
 <div class="item-list-container">
-  <div class="table-headers user-table-template">
-    <p class="table-header">USER</p>
-    <p class="table-header">EMAIL</p>
-    <p class="table-header">BALANCE</p>
-    <p class="table-header">ROLE</p>
-    <p class="table-header">MEMBER SINCE</p>
-    <p class="table-header"></p>
-  </div>
-  <app-user-item *ngFor="let user of pagedUserList.items" [user]="user"></app-user-item>
-  <app-paginator
-    *ngIf="pagedUserList.items !== null"
-    [isDarkBackground] ="true"
-    [length]="pagedUserList.totalCount"
-    [pageIndex]="pagedUserList.page - 1"
-    [pageSize]="pagedUserList.pageSize"
-    (pageChangedEvent)="onPageChangedEvent($event)"></app-paginator>
+  <ng-container *ngIf="pagedUserList | async as pagedUserList; else noUserTemplate">
+    <div class="sort-bar">
+      <a class="sort-column">SORT BY: </a>
+      <a class="sort-column active" title="Sort by default" (click)="onSortColumnClicked('default')">DEFAULT
+        <mat-icon>swap_vert</mat-icon>
+      </a>
+      <a class="sort-column active" title="Sort by last name" (click)="onSortColumnClicked('lastname')">LAST NAME
+        <mat-icon>swap_vert</mat-icon>
+      </a>
+      <a class="sort-column active" title="Sort by balance" (click)="onSortColumnClicked('balance')">BALANCE
+        <mat-icon>swap_vert</mat-icon>
+      </a>
+      <a class="sort-column active" title="Sort by creation date" (click)="onSortColumnClicked('createddate')">CREATION
+        DATE
+        <mat-icon>swap_vert</mat-icon>
+      </a>
+      <a class="sort-column active" title="Sort by modification date" (click)="onSortColumnClicked('birthday')">MODIFICATION
+        DATE
+        <mat-icon>swap_vert</mat-icon>
+      </a>
+    </div>
+    <div class="table-headers user-table-template">
+      <p class="table-header">USER</p>
+      <p class="table-header">EMAIL</p>
+      <p class="table-header">EMAIL STATUS</p>
+      <p class="table-header">BALANCE</p>
+      <p class="table-header">ROLE</p>
+      <p class="table-header">MEMBER SINCE</p>
+      <p class="table-header">MODIFIED DATE</p>
+      <p class="table-header"></p>
+    </div>
+    <app-user-item *ngFor="let user of pagedUserList.items" [user]="user"
+                   (deleteRequest)="onDeleteUserClicked($event)"></app-user-item>
+    <app-paginator
+      *ngIf="pagedUserList.items.length > 0"
+      [isDarkBackground]="true"
+      [length]="pagedUserList.totalCount"
+      [pageIndex]="pagedUserList.page - 1"
+      [pageSize]="pagedUserList.pageSize"
+      (pageChangedEvent)="onPageChangedEvent($event)"></app-paginator>
+  </ng-container>
+  <ng-template #noUserTemplate>
+    <p class="main-text white">USERS NOT FOUND</p>
+  </ng-template>
 </div>
 
 

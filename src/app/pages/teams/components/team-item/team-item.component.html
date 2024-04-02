@@ -1,10 +1,14 @@
 <div class="team-item-container">
-  <img [src] = "getImageSrc(team!.id)" (error)="onError($event)" class="team-logo" alt="{{team?.name}}">
-  <p class="team-name">{{team?.name}}</p>
+  <img [src]="team!.id | teamImageSrc" (error)="onError($event)" class="team-logo" alt="{{team?.name}}">
+  <p class="team-name">{{ team?.name }}</p>
   <div class="item-operations">
     <button mat-icon-button aria-label="Edit team" class="edit-button" matTooltip="Edit team">
-      <mat-icon>edit</mat-icon></button>
-    <button mat-icon-button aria-label="Delete team" class="delete-button" (click)="onDeleteClicked()" matTooltip="Delete team">
-      <mat-icon>delete</mat-icon></button>
+      <mat-icon>edit</mat-icon>
+    </button>
+    <button mat-icon-button aria-label="Delete team" class="delete-button" (click)="onDeleteClicked()"
+            matTooltip="Delete team">
+      <mat-icon>delete</mat-icon>
+    </button>
   </div>
 </div>
+

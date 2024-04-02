@@ -1,7 +1,7 @@
 export interface BaseResponse {
   id: string;
-  createdTimestamp: Date;
-  modifiedTimestamp?: Date | null;
-  createdBy: string;
-  modifiedBy?: string | null;
+  createdTime: Date;
+  modifiedTime?: Date | null;
+  createdById: string;
+  modifiedById?: string | null;
 }

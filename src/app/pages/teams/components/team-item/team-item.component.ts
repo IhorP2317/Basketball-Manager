@@ -9,18 +9,21 @@ import { Team } from '../../../../core/interfaces/team/team.model';
 export class TeamItemComponent {
   @Input() team?: Team | null;
   @Output() deleteRequest = new EventEmitter<Team>();
+
   constructor(@Inject('apiUrl') private baseUrl: string) {}
+
   onDeleteClicked() {
     this.deleteRequest.emit(this.team!);
   }
+
   getImageSrc(teamId: string): string {
     if (teamId) {
       return `${this.baseUrl}/teams/${teamId}/avatar`;
     }
-    return `../../../../../assets/images/default-team.png`;
+    return `assets/images/default-team.png`;
   }
+
   onError(event: Event) {
-    (event.target as HTMLImageElement).src =
-      `../../../../../assets/images/default-team.png`;
+    (event.target as HTMLImageElement).src = `assets/images/default-team.png`;
   }
 }

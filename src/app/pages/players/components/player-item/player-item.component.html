@@ -1,19 +1,23 @@
 <div class="item-container player-table-template">
-<div class="player-column">
-  <img class="player-logo" [src]="player?.photoPath" [alt]="player?.firstName + ' ' + player?.lastName">
-  <span class="player-full-name">{{ player?.firstName + ' ' + player?.lastName}}</span>
-</div>
-<div class="player-team">{{ player!.teamName }}</div>
-<div class="player-jersey-number">{{player?.jerseyNumber}}</div>
-<div class="player-position">{{player?.position}}</div>
-<div class="player-height">{{player?.height}}</div>
-  <div class="player-height">{{player?.weight}}</div>
-  <div class="player-birth-date">{{player?.dateOfBirth | date: 'dd/MM/yyyy'}}</div>
-  <div class="player-country">{{player?.country}}</div>
-<div class="item-operations">
-  <button mat-icon-button aria-label="Edit player" class="edit-button" matTooltip="Edit player">
-    <mat-icon>edit</mat-icon></button>
-  <button mat-icon-button aria-label="Delete player" class="delete-button" matTooltip="Delete player">
-    <mat-icon>delete</mat-icon></button>
-</div>
+  <div class="player-column">
+    <img class="player-logo" [src]="player!.id | playerImageSrc" (error)="onError($event)"
+         [alt]="player?.firstName + ' ' + player?.lastName">
+    <span class="player-full-name">{{ player?.firstName + ' ' + player?.lastName }}</span>
+  </div>
+  <div class="player-team">{{ player! | playerTeamName }}</div>
+  <div class="player-jersey-number">{{ player?.jerseyNumber }}</div>
+  <div class="player-position">{{ player?.position }}</div>
+  <div class="player-height">{{ player?.height }}</div>
+  <div class="player-height">{{ player?.weight }}</div>
+  <div class="player-birth-date">{{ player?.dateOfBirth | date: 'dd/MM/yyyy' }}</div>
+  <div class="player-country">{{ player?.country }}</div>
+  <div class="item-operations">
+    <button mat-icon-button aria-label="Edit player" class="edit-button" matTooltip="Edit player">
+      <mat-icon>edit</mat-icon>
+    </button>
+    <button mat-icon-button aria-label="Delete player" class="delete-button" (click)="onDeleteClicked()"
+            matTooltip="Delete player">
+      <mat-icon>delete</mat-icon>
+    </button>
+  </div>
 </div>

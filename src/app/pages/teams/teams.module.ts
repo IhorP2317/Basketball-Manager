@@ -11,11 +11,12 @@ import {MatTooltip} from "@angular/material/tooltip";
 import {MatFormField} from "@angular/material/form-field";
 import {MatInput} from "@angular/material/input";
 import {FormsModule} from "@angular/forms";
+import { TeamImageSrcPipe } from './pipes/team-image-src.pipe';
 
 
 
 @NgModule({
-  declarations: [TeamsComponent, TeamItemComponent],
+  declarations: [TeamsComponent, TeamItemComponent, TeamImageSrcPipe],
   imports: [
     CommonModule,
     RouterModule.forChild([{ path: '', component: TeamsComponent }]),

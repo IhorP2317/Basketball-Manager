@@ -6,7 +6,7 @@
   <div class="match-team home-team">
     <img
       class="match-logo"
-      [src]="getImageSrc(match!.homeTeamId, 'home')"
+      [src]="match!.homeTeamId | matchTeamImageSrc: 'home'"
       (error)="onError($event, 'home')"
       alt="{{ match?.homeTeamName }}"
     />
@@ -16,7 +16,7 @@
   <div class="match-team away-team">
     <img
       class="match-logo"
-      [src]="getImageSrc(match!.awayTeamId, 'away')"
+      [src]="match!.awayTeamId | matchTeamImageSrc: 'away'"
       (error)="onError($event, 'away')"
       alt="{{ match?.awayTeamName }}"
     />

@@ -4,18 +4,14 @@
     <div class="select-filters">
       <mat-form-field appearance="fill">
         <mat-label>Choose a team</mat-label>
-        <mat-select>
-          <mat-option
-            *ngFor="let teamName of teamNames"
-            [value]="teamName.value"
-          >
-            {{ teamName.value }}
-          </mat-option>
+        <mat-select [(ngModel)]="selectedTeam" name="team" (selectionChange)="onSelectedTeamChange()">
+          <mat-option value="All teams">All teams</mat-option>
+          <mat-option *ngFor="let team of selectTeams | async" [value]="team.name">{{ team.name }}</mat-option>
         </mat-select>
       </mat-form-field>
       <mat-form-field appearance="fill">
         <mat-label>Choose a position</mat-label>
-        <mat-select>
+        <mat-select [(ngModel)]="selectedPosition" name="position" (selectionChange)="onSelectedPositionChange()">
           <mat-option
             *ngFor="let position of positions"
             [value]="position.value"
@@ -24,51 +20,87 @@
           </mat-option>
         </mat-select>
       </mat-form-field>
-
-  <div class ="search-container">
-  <mat-form-field class="full-width-input" appearance="outline">
-    <input matInput placeholder="Search a player" type="text" >
-  </mat-form-field>
-  <button mat-icon-button class="button-primary">
-    <mat-icon>search</mat-icon>
-  </button>
-  </div>
-    <div class="add-button-container">
-      <button
-        mat-icon-button
-        aria-label="Create a new player"
-        class="add-button"
-        matTooltip="Create a new player"
+      <mat-select-country
+        [(ngModel)]="selectedCountry"
+        (onCountrySelected)="onSelectedCountryChange()"
+        appearance="fill"
+        [itemsLoadSize]="0"
+        label="Choose a country"
       >
-        <mat-icon>add_circle_outline</mat-icon>
-      </button>
+      </mat-select-country>
+      <div class="search-container">
+        <mat-form-field class="full-width-input" appearance="outline">
+          <input
+            matInput
+            placeholder="Search a player"
+            type="text"
+            [(ngModel)]="searchedPlayer"
+            (ngModelChange)="onSearchPlayerChanged()"
+          />
+        </mat-form-field>
+      </div>
+      <div class="add-button-container">
+        <button
+          mat-icon-button
+          aria-label="Create a new player"
+          class="add-button"
+          matTooltip="Create a new player"
+        >
+          <mat-icon>add_circle_outline</mat-icon>
+        </button>
+      </div>
     </div>
-</div>
-
-</div>
-
-<div class="item-list-container">
-  <div class="table-headers player-table-template">
-    <p class="table-header">PLAYER</p>
-    <p class="table-header">TEAM</p>
-    <p class="table-header">JERSEY NUMBER</p>
-    <p class="table-header">POSITION</p>
-    <p class="table-header">HEIGHT</p>
-    <p class="table-header">WEIGHT</p>
-    <p class="table-header">BIRTH DATE</p>
-    <p class="table-header">COUNTRY</p>
-    <p class="table-header"></p>
   </div>
-  <app-player-item *ngFor="let player of pagedPlayerList.items" [player]="player"></app-player-item>
-  <app-paginator
-    *ngIf="pagedPlayerList.items !== null"
-    [isDarkBackground] ="true"
-    [length]="pagedPlayerList.totalCount"
-    [pageIndex]="pagedPlayerList.page - 1"
-    [pageSize]="pagedPlayerList.pageSize"
-    (pageChangedEvent)="onPageChangedEvent($event)"
-  />
-</div>
-</div>
 
+  <div class="item-list-container">
 
+    <ng-container *ngIf="playerPagedList | async as playerPagedList; else noPlayersTemplate ">
+      <div class="sort-bar">
+        <a class="sort-column">SORT BY: </a>
+        <a class="sort-column active" title="Sort by default" (click)="onSortColumnClicked('default')">DEFAULT
+          <mat-icon>swap_vert</mat-icon>
+        </a>
+        <a class="sort-column active" title="Sort by last name" (click)="onSortColumnClicked('lastname')">LAST NAME
+          <mat-icon>swap_vert</mat-icon>
+        </a>
+        <a class="sort-column active" title="Sort by height" (click)="onSortColumnClicked('height')">HEIGHT
+          <mat-icon>swap_vert</mat-icon>
+        </a>
+        <a class="sort-column active" title="Sort by weight" (click)="onSortColumnClicked('weight')">WEIGHT
+          <mat-icon>swap_vert</mat-icon>
+        </a>
+        <a class="sort-column active" title="Sort by Birth Date" (click)="onSortColumnClicked('birthday')">BIRTH DATE
+          <mat-icon>swap_vert</mat-icon>
+        </a>
+      </div>
+      <div class="table-headers player-table-template">
+        <p class="table-header">PLAYER</p>
+        <p class="table-header">TEAM</p>
+        <p class="table-header">JERSEY NUMBER</p>
+        <p class="table-header">POSITION</p>
+        <p class="table-header">HEIGHT</p>
+        <p class="table-header">WEIGHT</p>
+        <p class="table-header">BIRTH DATE</p>
+        <p class="table-header">COUNTRY</p>
+        <p class="table-header"></p>
+      </div>
+
+      <app-player-item
+        *ngFor="let player of playerPagedList.items"
+        [player]="player"
+        (deleteRequest)="onDeletePlayerClicked($event)"
+      ></app-player-item>
+      <app-paginator
+        *ngIf="playerPagedList.items.length > 0"
+        [isDarkBackground]="true"
+        [length]="playerPagedList.totalCount"
+        [pageIndex]="playerPagedList.page - 1"
+        [pageSize]="playerPagedList.pageSize"
+        (pageChangedEvent)="onPageChangedEvent($event)"
+      />
+    </ng-container>
+    <ng-template #noPlayersTemplate>
+      <P CLASS="main-text white">PLAYERS NOT FOUND</P>
+    </ng-template>
+  </div>
+</div>
