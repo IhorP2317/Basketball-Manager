@@ -1,4 +1,3 @@
-
 <div class="head-with-filters">
   <h1 class="page-head">SCHEDULE</h1>
   <div class="app-filters">
@@ -18,20 +17,20 @@
       </mat-form-field>
     </div>
     <ng-container *ngIf="filters | async as filters">
-    <div class="date-navigation">
-      <button mat-icon-button class="month-button" (click)="onPreviousMonthClicked()">
-        <mat-icon>chevron_left</mat-icon>
-      </button>
-      <div class="date-info">
-        <div class="month">{{   filters.month | monthName }}</div>
-        <div class="year">{{ filters.year}}</div>
+      <div class="date-navigation">
+        <button mat-icon-button class="month-button" (click)="onPreviousMonthClicked()">
+          <mat-icon>chevron_left</mat-icon>
+        </button>
+        <div class="date-info">
+          <div class="month">{{ filters.month | monthName }}</div>
+          <div class="year">{{ filters.year }}</div>
+        </div>
+        <button mat-icon-button class="month-button" (click)="onNextMonthClicked()">
+          <mat-icon>chevron_right</mat-icon>
+        </button>
       </div>
-      <button mat-icon-button class="month-button" (click)="onNextMonthClicked()">
-        <mat-icon>chevron_right</mat-icon>
-      </button>
-    </div>
-     </ng-container>
-    <div class="add-button-container">
+    </ng-container>
+    <div class="add-button-container" *ngIf="isAdminUser()">
       <button
         mat-icon-button
         aria-label="Create new match"
@@ -50,6 +49,7 @@
       *ngIf="(matchesPagedList.items | filterMatches:'Scheduled').length > 0"
       [matches]="matchesPagedList.items | filterMatches:'Scheduled'"
       [listHeader]="'NEXT GAMES'"
+      [isAdmin]="isAdminUser()"
       (deleteMatch)="onDeleteMatchClicked($event)"
     ></matches-list>
 

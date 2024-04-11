@@ -10,7 +10,7 @@ import { MatButton, MatIconButton } from '@angular/material/button';
 import { MatchItemComponent } from './components/match-item/match-item.component';
 import { MatTableModule } from '@angular/material/table';
 import { MatTooltip } from '@angular/material/tooltip';
-import { SharedComponentsModule } from '../../shared/components/shared-components.module';
+import { SharedModule } from '../../shared/shared.module';
 import { MonthNamePipe } from './pipes/month-name.pipe';
 import { MatchTimePipe } from './pipes/match-time.pipe';
 import { MatchScorePipe } from './pipes/match-score.pipe';
@@ -40,7 +40,7 @@ import { MatchTeamImageSrcPipe } from './pipes/match-team-image-src.pipe';
     MatTableModule,
     NgOptimizedImage,
     MatTooltip,
-    SharedComponentsModule,
+    SharedModule,
     FormsModule,
   ],
 })

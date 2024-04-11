@@ -6,22 +6,29 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatIcon } from '@angular/material/icon';
-import { MatButton, MatIconButton } from '@angular/material/button';
+import {
+  MatButton,
+  MatButtonModule,
+  MatIconButton,
+} from '@angular/material/button';
 import { MatTooltip } from '@angular/material/tooltip';
 import { PlayerItemComponent } from './components/player-item/player-item.component';
-import { SharedComponentsModule } from '../../shared/components/shared-components.module';
+import { SharedModule } from '../../shared/shared.module';
 import { HttpClientModule } from '@angular/common/http';
 import { MatSelectCountryModule } from '@angular-material-extensions/select-country';
-import { FormsModule } from '@angular/forms';
-import { PlayerImageSrcPipe } from './pipes/player-image-src.pipe';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { PlayerTeamNamePipe } from './pipes/player-team-name.pipe';
+import { DataManagerCreateAndEditPlayerComponent } from './components/data-manager-create-and-edit-player/data-manager-create-and-edit-player.component';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatCard, MatCardContent } from '@angular/material/card';
+import { MatNativeDateModule } from '@angular/material/core';
 
 @NgModule({
   declarations: [
     PlayersComponent,
     PlayerItemComponent,
-    PlayerImageSrcPipe,
     PlayerTeamNamePipe,
+    DataManagerCreateAndEditPlayerComponent,
   ],
   imports: [
     CommonModule,
@@ -33,10 +40,17 @@ import { PlayerTeamNamePipe } from './pipes/player-team-name.pipe';
     MatIconButton,
     MatTooltip,
     MatButton,
-    SharedComponentsModule,
+    SharedModule,
     HttpClientModule,
     MatSelectCountryModule,
     FormsModule,
+    ReactiveFormsModule,
+    MatDatepickerModule,
+    MatButtonModule,
+    MatNativeDateModule,
+    MatCardContent,
+    MatCard,
   ],
+  exports: [],
 })
 export class PlayersModule {}

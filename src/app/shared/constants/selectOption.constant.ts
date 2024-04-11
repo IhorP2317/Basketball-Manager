@@ -1,5 +1,12 @@
-export const PLAYER_POSITIONS = [
+import { Country } from '@angular-material-extensions/select-country';
+
+export const PLAYER_FILTER_POSITIONS = [
   { value: 'All positions' },
+  { value: 'Guard' },
+  { value: 'Forward' },
+  { value: 'Center' },
+];
+export const PLAYER_ACTIONS_POSITIONS = [
   { value: 'Guard' },
   { value: 'Forward' },
   { value: 'Center' },
@@ -15,3 +22,10 @@ export const EMAIL_STATUSES = [
   { value: 'Confirmed' },
   { value: 'Unconfirmed' },
 ];
+export const DEFAULT_COUNTRY: Country = {
+  name: 'Ukraine',
+  alpha2Code: 'UA',
+  alpha3Code: 'UKR',
+  numericCode: '804',
+  callingCode: '+380',
+};

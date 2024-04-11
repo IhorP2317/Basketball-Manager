@@ -1,11 +1,27 @@
 <div class="header">
   <div class="header-content">
-    <span class="platform-name" >{{platformName}}</span>
-    <div class="header-content-user">
-<mat-icon  svgIcon="ticket-icon" class="custom-icon"></mat-icon>
-      <a routerLink="/login"><button mat-raised-button class="button-secondary">LOGIN</button></a>
-      <a routerLink="/sign-up"><button mat-raised-button class="button-primary">SIGN UP</button></a>
+    <span class="platform-name">{{ platformName }}</span>
+    <div *ngIf="showUserContent$ | async">
+      <div class="header-content-user" *ngIf="(currentUser$ | async) as currentUser; else guestLinks">
+        <mat-icon svgIcon="ticket-icon" class="custom-icon"></mat-icon>
+        <div class="user-profile">
+          <img class="current-user-image" [src]="currentUser!.id | currentUserImgSrc" (error)="onImageError($event)"
+               alt="User profile">
+          <span>{{ currentUser.firstName }} {{ currentUser.lastName }}</span>
+        </div>
+        <button mat-raised-button class="button-primary" (click)="onLogOutClicked()">LOG OUT</button>
+      </div>
+      <ng-template #guestLinks>
+        <div class="header-content-user">
+          <mat-icon svgIcon="ticket-icon" class="custom-icon"></mat-icon>
+          <a routerLink="/login">
+            <button mat-raised-button class="button-secondary">LOGIN</button>
+          </a>
+          <a routerLink="/sign-up">
+            <button mat-raised-button class="button-primary">SIGN UP</button>
+          </a>
+        </div>
+      </ng-template>
     </div>
   </div>
 </div>
-

@@ -7,6 +7,7 @@ import { filter } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogData } from '../../core/interfaces/dialog/dialog-data';
 import { ConfirmationDialogComponent } from '../../shared/components/dialog/confirmation-dialog.component';
+import { CurrentUserService } from '../../shared/services/current-user.service';
 
 @UntilDestroy()
 @Component({
@@ -28,11 +29,16 @@ export class MatchesComponent implements OnInit {
 
   constructor(
     private matchesPageService: MatchesPageService,
+    private currentUserService: CurrentUserService,
     public dialog: MatDialog,
   ) {}
 
   ngOnInit() {
     this.subscribeToFilterChanges();
+  }
+
+  isAdminUser() {
+    return this.currentUserService.isAdminOrSuperAdmin();
   }
 
   private subscribeToFilterChanges() {

@@ -8,6 +8,7 @@ import { Team } from '../../../../core/interfaces/team/team.model';
 })
 export class TeamItemComponent {
   @Input() team?: Team | null;
+  @Input() isAdmin: boolean = false;
   @Output() deleteRequest = new EventEmitter<Team>();
 
   constructor(@Inject('apiUrl') private baseUrl: string) {}

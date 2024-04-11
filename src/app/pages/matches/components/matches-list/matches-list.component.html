@@ -1,6 +1,6 @@
 <div class="match-list-container">
-  <p class="head-type">{{listHeader}}</p>
-  <div class="table-headers match-table-template">
+  <p class="head-type">{{ listHeader }}</p>
+  <div class="table-headers" [ngClass]="{'match-table-template': !isAdmin, 'match-table-template-admin': isAdmin}">
     <p class="table-header">TIME</p>
     <p class="table-header">LOCATION</p>
     <p class="table-header">HOME TEAM</p>
@@ -8,8 +8,9 @@
     <p class="table-header">AWAY TEAM</p>
     <p class="table-header">SCORE</p>
     <p class="table-header"></p>
-    <p class="table-header">OPERATIONS</p>
+    <p class="table-header" *ngIf="isAdmin"></p>
   </div>
-  <match-item *ngFor="let match of matches" [match]="match" (deleteRequest)="onDeleteRequested($event)" ></match-item>
+  <match-item *ngFor="let match of matches" [match]="match" [isAdmin]="isAdmin"
+              (deleteRequest)="onDeleteRequested($event)"></match-item>
 </div>
 

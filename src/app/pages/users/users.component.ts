@@ -5,11 +5,11 @@ import {
 } from '../../shared/constants/selectOption.constant';
 import { PagedListConfiguration } from '../../core/interfaces/paged-list/paged-list-configuration.dto';
 import { UsersPageService } from './services/users.page.service';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { User } from '../../core/interfaces/user/user.model';
 import { DialogData } from '../../core/interfaces/dialog/dialog-data';
 import { ConfirmationDialogComponent } from '../../shared/components/dialog/confirmation-dialog.component';
-import { filter } from 'rxjs';
+import { debounceTime, distinctUntilChanged, filter } from 'rxjs';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { MatDialog } from '@angular/material/dialog';
 
@@ -32,14 +32,55 @@ export class UsersComponent implements OnInit {
   constructor(
     private userPageService: UsersPageService,
     public dialog: MatDialog,
-  ) {}
-
-  ngOnInit() {
-    this.usersFiltersForm = new FormGroup({
-      role: new FormControl(this.roles[0].value),
-      emailStatus: new FormControl(this.statuses[0].value),
-      searchUser: new FormControl(''),
+    private fb: FormBuilder,
+  ) {
+    this.usersFiltersForm = this.fb.group({
+      role: [this.roles[0].value],
+      emailStatus: [this.statuses[0].value],
+      searchUser: [''],
     });
+  }
+
+  ngOnInit(): void {
+    this.usersFiltersForm
+      .get('role')
+      ?.valueChanges.pipe(distinctUntilChanged(), untilDestroyed(this))
+      .subscribe((role) => {
+        this.userPageService.setSelectedRole(
+          role === 'All roles' ? null : role,
+        );
+      });
+
+    this.usersFiltersForm
+      .get('emailStatus')
+      ?.valueChanges.pipe(distinctUntilChanged(), untilDestroyed(this))
+      .subscribe((status) => {
+        if (status === 'All statuses') {
+          this.userPageService.setSelectedEmailStatus(null);
+        } else {
+          const emailStatus =
+            status === 'Confirmed'
+              ? true
+              : status === 'Unconfirmed'
+                ? false
+                : null;
+          this.userPageService.setSelectedEmailStatus(emailStatus);
+        }
+      });
+
+    this.usersFiltersForm
+      .get('searchUser')
+      ?.valueChanges.pipe(
+        debounceTime(300),
+        distinctUntilChanged(),
+        untilDestroyed(this),
+      )
+      .subscribe((searchTerm) => {
+        const trimmedSearchTerm = searchTerm.trim();
+        this.userPageService.setSearchedUser(
+          trimmedSearchTerm.length > 0 ? trimmedSearchTerm : null,
+        );
+      });
   }
 
   onSelectedRoleChange() {
@@ -63,15 +104,6 @@ export class UsersComponent implements OnInit {
         this.userPageService.setSelectedEmailStatus(false);
       }
     }
-  }
-
-  onSearchedUserChange() {
-    const selectedStatus = this.usersFiltersForm?.get('searchUser')?.value;
-    if (selectedStatus !== null) {
-      const trimmedString = selectedStatus.replace(/\\s+/g, '');
-      if (trimmedString.length < 1) this.userPageService.setSearchedUser(null);
-    }
-    this.userPageService.setSearchedUser(selectedStatus);
   }
 
   onSortColumnClicked(sortColumn: string) {

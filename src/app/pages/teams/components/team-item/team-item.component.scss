@@ -1,17 +1,19 @@
-.team-item-container{
-  display:flex;
-  flex-direction:  column;
+.team-item-container {
+  display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-  .team-logo{
+
+  .team-logo {
     width: 150px;
     height: 150px;
   }
+
   .team-name {
     font-size: 18px;
     font-weight: bold;
     text-align: center;
-    padding: 0 10px;
+    padding: 0 10px;;
     word-wrap: break-word;
   }
 }

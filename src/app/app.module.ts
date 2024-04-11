@@ -1,21 +1,23 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { SharedComponentsModule } from './shared/components/shared-components.module';
+import { SharedModule } from './shared/shared.module';
 import { AppRoutingModule } from './app-routing.module';
 import { MatIconModule } from '@angular/material/icon';
 import { AppComponent } from './app.component';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { environment } from '../environments/environment';
 import { DatePipe } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { MatSelectCountryModule } from '@angular-material-extensions/select-country';
+import { AuthInterceptor } from './core/interceptors/auth-interceptor';
+import { PopUpContentDirective } from './shared/directives/pop-up-content.directive';
 
 @NgModule({
   declarations: [AppComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    SharedComponentsModule,
+    SharedModule,
     MatIconModule,
     HttpClientModule,
     MatSelectCountryModule.forRoot('en'),
@@ -30,8 +32,14 @@ import { MatSelectCountryModule } from '@angular-material-extensions/select-coun
       provide: 'securityUrl',
       useValue: environment.securityUrl,
     },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true,
+    },
     DatePipe,
   ],
   bootstrap: [AppComponent],
+  exports: [PopUpContentDirective],
 })
 export class AppModule {}

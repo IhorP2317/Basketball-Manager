@@ -1,4 +1,7 @@
-
-<app-header ></app-header>
-<app-navigation-tap-group></app-navigation-tap-group>
+<app-header></app-header>
+<ng-container *ngIf="showNav$ | async">
+  <app-navigation-tap-group></app-navigation-tap-group>
+</ng-container>
 <router-outlet></router-outlet>
+<app-spinner></app-spinner>
+

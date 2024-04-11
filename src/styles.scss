@@ -134,23 +134,32 @@ body {
   border-bottom: 1px solid #ccc;
 }
 
-.player-table-template {
+.player-table-template-admin {
   grid-template-columns: 250px 200px 200px 150px 150px 150px 150px 150px 150px;
 }
 
-.match-table-template {
+.player-table-template {
+  grid-template-columns: 250px 200px 200px 150px 150px 150px 150px 150px;
+}
+
+.match-table-template-admin {
   grid-template-columns: 360px 360px 180px 180px 180px 180px 180px 180px;
+}
+
+.match-table-template {
+  grid-template-columns: 360px 360px 180px 180px 180px 180px 180px;
 }
 
 .user-table-template {
   grid-template-columns: 250px 200px 200px 200px 200px 200px 200px 200px;
 }
 
+
 .head-type {
-  font-size: 18px;
+  font-size: 24px;
   text-align: center;
   color: white;
-  margin: 15px 0;
+  margin: 20px 0;
 }
 
 .main-text {
@@ -209,7 +218,7 @@ body {
 }
 
 .hints {
-  margin-top: 10px;
+  margin-top: 15px;
 }
 
 .auth-card {
@@ -249,6 +258,23 @@ body {
 
 }
 
+.success-snackbar {
+  background-color: #4caf50 !important;
+  color: #fff;
+  margin: 0 !important;
+  position: absolute;
+  right: 25px;
+  top: 60px;
+}
+
+.error-snackbar {
+  background-color: #f44336 !important;
+  color: #fff;
+  margin: 0 !important;
+  position: absolute;
+  right: 25px;
+  top: 60px;
+}
 
 .active {
   cursor: pointer;
@@ -256,4 +282,20 @@ body {
   &:active {
     color: #35D8DEFF
   }
+}
+
+.error-page {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 70vh;
+  gap: 20px;
+}
+
+.home {
+  display: inline-flex;
+  align-items: center;
+  font-size: 24px;
+  gap: 8px;
 }

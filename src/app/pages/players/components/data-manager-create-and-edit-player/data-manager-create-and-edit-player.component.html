@@ -1,0 +1,222 @@
+<mat-card class="player-card">
+  <h1>{{ action }} Player</h1>
+  <mat-card-content class="player-card-content">
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+      <div class="image-container">
+        <app-avatar (handleFileChange)="handleImageFile($event)" [formControl]="form.controls.avatar"></app-avatar>
+      </div>
+
+      <p *ngIf="errorMessage != null">{{ errorMessage }}</p>
+      <div class="personal-info-group full-width">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>First Name</mat-label>
+          <input
+            matInput
+            placeholder="Player's first name"
+            type="text"
+            [formControl]="form.controls.firstName"
+          />
+
+          <mat-error
+            *ngIf="
+              form.controls.firstName?.dirty || form.controls.firstName?.touched
+            "
+          >
+            <span *ngIf="form.controls.firstName?.hasError('required')"
+            >First name is <strong>required</strong></span
+            >
+            <span *ngIf="form.controls.firstName?.hasError('pattern')"
+            >Please enter a valid first name</span
+            >
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Last Name</mat-label>
+          <input
+            matInput
+            placeholder="Player's last name"
+            type="text"
+            [formControl]="form.controls.lastName"
+          />
+
+          <mat-error
+            *ngIf="
+                   form.controls.lastName?.dirty ||form.controls.lastName?.touched
+                  "
+          >
+                  <span *ngIf="form.controls.lastName?.hasError('required')"
+                  >Last name is <strong>required</strong></span
+                  >
+            <span *ngIf="form.controls.lastName?.hasError('pattern')"
+            >Please enter a valid last name</span
+            >
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <mat-form-field class="full-width" appearance="outline">
+        <mat-label>Birth date</mat-label>
+        <input matInput [matDatepicker]="picker" [max]="maxBirthDate" placeholder="MM/DD/YYYY" readonly
+               [formControl]="form.controls.birthDay">
+        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+        <mat-error
+          *ngIf="
+                    form.controls.birthDay?.dirty || form.controls.birthDay?.touched
+                  "
+        >
+                  <span *ngIf="form.controls.birthDay.hasError('required')"
+                  >Birth day is <strong>required</strong></span>
+        </mat-error>
+      </mat-form-field>
+      <div class="country-measurements-group">
+        <mat-select-country class="full-width"
+                            [formControl]="form.controls.country"
+                            [required]="true"
+                            appearance="outline"
+                            [itemsLoadSize]="0"
+                            [value]="DEFAULT_COUNTRY"
+                            label="Choose country"
+        >
+          <mat-error
+            *ngIf="
+                    form.controls.country?.dirty || form.controls.country?.touched
+                  "
+          >
+                  <span *ngIf=" form.controls.country?.hasError('required')"
+                  >Country is <strong>required</strong></span
+                  >
+          </mat-error>
+        </mat-select-country>
+
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Height (m)</mat-label>
+          <input matInput type="number" [formControl]="form.controls.height" step="0.01" min="1.01">
+          <mat-error
+            *ngIf="
+                    form.controls.height?.dirty || form.controls.height?.touched
+                  "
+          >
+                  <span *ngIf="form.controls.height?.hasError('required')"
+                  >Height is <strong>required</strong></span
+                  >
+            <span *ngIf="form.controls.height?.hasError('min')"> Height is too low</span>
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Weight (kg)</mat-label>
+          <input matInput type="number" [formControl]="form.controls.weight" step="0.01" min="50.01">
+          <mat-error
+            *ngIf="
+                  form.controls.weight?.dirty || form.controls.weight?.touched
+                  "
+          >
+                  <span *ngIf="form.controls.weight?.hasError('required')"
+                  >Weight is <strong>required</strong></span
+                  >
+            <span *ngIf="form.controls.weight?.hasError('min')"> Weight too small</span>
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <mat-form-field class="full-width" appearance="outline">
+        <mat-label>Position</mat-label>
+        <mat-select [formControl]="form.controls.position">
+          <mat-option *ngFor="let position of positions" [value]="position.value">{{ position.value }}</mat-option>
+        </mat-select>
+        <mat-error
+          *ngIf="
+                  form.controls.position?.dirty || form.controls.position?.touched
+                  "
+        >
+                  <span *ngIf="form.controls.position?.hasError('required')"
+                  >Position is <strong>required</strong></span
+                  >
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Team</mat-label>
+        <mat-select [formControl]="form.controls.team">
+          <mat-option value="Free agent">Free agent</mat-option>
+          <mat-option *ngFor="let team of selectTeams$ | async" [value]="team">{{ team.name }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <div class="jersey-number-add-experience-group">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Jersey Number</mat-label>
+          <input matInput type="number" [formControl]="form.controls.jerseyNumber" step="1" min="0">
+          <mat-error
+            *ngIf="
+                   form.controls.jerseyNumber?.dirty ||form.controls.jerseyNumber?.touched
+                  "
+          >
+                  <span *ngIf="form.controls.jerseyNumber?.hasError('required')"
+                  >Jersey number is <strong>required</strong></span
+                  >
+            <span *ngIf="form.controls.jerseyNumber?.hasError('min')"> Jersey number must be positive number</span>
+          </mat-error>
+        </mat-form-field>
+        <div *ngIf="action === 'Create'" class="add-button-container">
+          <button
+            mat-icon-button
+            aria-label="Create new match"
+            type="button"
+            class="add-button"
+            (click)="onAddExperienceClick()"
+            matTooltip="Add new player experience"
+          >
+            <mat-icon>add_circle_outline</mat-icon>
+          </button>
+        </div>
+      </div>
+      <div *ngIf="action === 'Create'" class="experience-actions">
+        <ng-container formArrayName="experiences">
+          <ng-container *ngFor="let experienceForm of experiences.controls; let i = index" [formGroupName]="i">
+            <div class="experience-form-row">
+              <mat-form-field appearance="outline">
+                <mat-label>Experience Date Range</mat-label>
+                <mat-date-range-input [rangePicker]="picker">
+                  <input matStartDate formControlName="startDate" [min]="minExperienceDate" [max]="maxExperienceDate"
+                         placeholder="Start date">
+                  <input matEndDate formControlName="endDate" [min]="minExperienceDate" [max]="maxExperienceDate"
+                         placeholder="End date">
+                </mat-date-range-input>
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-date-range-picker #picker></mat-date-range-picker>
+                <mat-error *ngIf="experienceForm.get('startDate')?.dirty || experienceForm.get('startDate')?.touched">
+                  <span
+                    *ngIf="experienceForm.get('startDate')?.hasError('required')">Start Date is <strong>required</strong></span>
+                  <span *ngIf="experienceForm.get('startDate')?.hasError('min')">Start date cannot be before minimum date</span>
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field appearance="outline">
+                <mat-label>Team</mat-label>
+                <mat-select formControlName="team">
+                  <mat-option *ngFor="let team of selectTeams$ | async" [value]="team">{{ team.name }}</mat-option>
+                </mat-select>
+                <mat-error *ngIf=" experienceForm.get('team')?.dirty || experienceForm.get('team')?.touched">
+                  <span
+                    *ngIf="experienceForm.get('team')?.hasError('required')">Team is <strong>required</strong></span>
+                </mat-error>
+              </mat-form-field>
+              <button mat-icon-button aria-label="Delete player" class="delete-button"
+                      (click)="onRemoveExperienceClick(i)"
+                      matTooltip="Delete player">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+          </ng-container>
+        </ng-container>
+      </div>
+      <div class="button-action-container">
+        <button
+          class="button-primary full-width"
+          mat-raised-button
+          type="submit"
+        >
+          {{ action }}
+        </button>
+      </div>
+    </form>
+  </mat-card-content>
+</mat-card>

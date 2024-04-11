@@ -1,4 +1,4 @@
-<div class="item-container match-table-template">
+<div class="item-container" [ngClass]="{'match-table-template': !isAdmin, 'match-table-template-admin': isAdmin}">
   <div class="match-time">
     <span class="match-date">{{ match | matchTime }}</span>
   </div>
@@ -41,7 +41,7 @@
       Show statistics
     </button>
   </div>
-  <div class="item-operations">
+  <div class="item-operations" *ngIf="isAdmin">
     <button
       mat-icon-button
       aria-label="Edit match"

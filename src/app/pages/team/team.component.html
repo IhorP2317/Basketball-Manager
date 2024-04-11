@@ -1,0 +1,48 @@
+<div class="team-container" *ngIf="team">
+  <div class="team-head">
+    <h1 class="page-head">{{ team?.name | uppercase }}</h1>
+    <img [src]='team?.id | teamImageSrc' class="team-logo" (error)="onError($event)" [alt]="team?.name">
+  </div>
+  <div class="item-list-container">
+    <div class="list-head">
+      <p class="head-type">PLAYERS</p>
+      <div class="add-button-container" *ngIf="isAdminUser()">
+        <button
+          mat-icon-button
+          aria-label="Create a new player"
+          class="add-button"
+          matTooltip="Create a new player"
+        >
+          <mat-icon>add_circle_outline</mat-icon>
+        </button>
+      </div>
+    </div>
+
+
+    <div class="staff-list">
+      <app-team-player-item *ngFor="let player of team.players" [player]="player"
+                            [isAdmin]="isAdminUser()"></app-team-player-item>
+    </div>
+    <div class="list-head">
+      <p class="head-type">Coaches</p>
+      <div class="add-button-container" *ngIf="isAdminUser()">
+        <button
+          mat-icon-button
+          aria-label="Create a new coach"
+          class="add-button"
+          matTooltip="Create a new coach"
+        >
+          <mat-icon>add_circle_outline</mat-icon>
+        </button>
+      </div>
+    </div>
+
+    <div class="staff-list">
+      <app-team-coach-item *ngFor="let coach of team.coaches" [coach]="coach"
+                           [isAdmin]="isAdminUser()"></app-team-coach-item>
+    </div>
+  </div>
+  Coach
+</div>
+
+

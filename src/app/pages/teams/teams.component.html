@@ -11,7 +11,7 @@
           (ngModelChange)="onSearchTeamChanged()"
         />
       </mat-form-field>
-      <div class="add-button-container">
+      <div class="add-button-container" *ngIf="isAdminUser()">
         <button
           mat-icon-button
           aria-label="Create new team"
@@ -29,7 +29,8 @@
     >
       <div class="teams-list">
         <div *ngFor="let team of teamsPagedList.items">
-          <app-team-item [team]="team" (deleteRequest)="onDeleteTeamClicked($event)"></app-team-item>
+          <app-team-item [team]="team" [isAdmin]="isAdminUser()"
+                         (deleteRequest)="onDeleteTeamClicked($event)"></app-team-item>
         </div>
       </div>
       <app-paginator

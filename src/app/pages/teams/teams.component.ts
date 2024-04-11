@@ -7,6 +7,7 @@ import { DialogData } from '../../core/interfaces/dialog/dialog-data';
 import { ConfirmationDialogComponent } from '../../shared/components/dialog/confirmation-dialog.component';
 import { filter } from 'rxjs';
 import { untilDestroyed } from '@ngneat/until-destroy';
+import { CurrentUserService } from '../../shared/services/current-user.service';
 
 @Component({
   selector: 'app-teams',
@@ -24,9 +25,14 @@ export class TeamsComponent {
   constructor(
     private teamsPageService: TeamsPageService,
     public dialog: MatDialog,
+    private currentUserService: CurrentUserService,
   ) {}
 
   filters = this.teamsPageService.filters$;
+
+  isAdminUser() {
+    return this.currentUserService.isAdminOrSuperAdmin();
+  }
 
   onSearchTeamChanged() {
     if (this.selectedTeam !== null) {

@@ -1,0 +1,39 @@
+@import '../../../../../variables.scss';
+
+.staff-item-container {
+  display: flex;
+  align-items: center;
+  background: $tertiary-default;
+  justify-content: center;
+  border-radius: 10px;
+  padding: 10px;
+  color: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  margin-bottom: 10px;
+}
+
+.staff-image {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  margin-right: 10px;
+}
+
+.player-info {
+  flex-grow: 1;
+}
+
+.player-name {
+  font-weight: bold;
+  margin: 0;
+}
+
+.player-number {
+  font-size: 1.5em;
+  margin: 0;
+}
+
+.player-position {
+  font-style: italic;
+  margin: 0;
+}

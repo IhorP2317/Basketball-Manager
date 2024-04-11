@@ -9,13 +9,18 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { UserItemComponent } from './components/user-item/user-item.component';
 import { MatTooltip } from '@angular/material/tooltip';
-import { SharedComponentsModule } from '../../shared/components/shared-components.module';
+import { SharedModule } from '../../shared/shared.module';
 import { UserModificationTimePipe } from './pipes/user-modification-time.pipe';
 import { ReactiveFormsModule } from '@angular/forms';
 import { UserImageSrcPipe } from './pipes/user-image-src.pipe';
 
 @NgModule({
-  declarations: [UsersComponent, UserItemComponent, UserModificationTimePipe, UserImageSrcPipe],
+  declarations: [
+    UsersComponent,
+    UserItemComponent,
+    UserModificationTimePipe,
+    UserImageSrcPipe,
+  ],
   imports: [
     CommonModule,
     RouterModule.forChild([{ path: '', component: UsersComponent }]),
@@ -25,7 +30,7 @@ import { UserImageSrcPipe } from './pipes/user-image-src.pipe';
     MatInputModule,
     MatIconButton,
     MatTooltip,
-    SharedComponentsModule,
+    SharedModule,
     ReactiveFormsModule,
   ],
 })

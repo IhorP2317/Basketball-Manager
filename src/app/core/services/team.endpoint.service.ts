@@ -6,6 +6,7 @@ import { PagedList } from '../interfaces/paged-list/paged-list.model';
 import { prepareQueryParameters } from '../helpers/query-parameters.helper';
 import { BaseFiltersDto } from '../interfaces/base-filters.dto';
 import { Team } from '../interfaces/team/team.model';
+import { TeamDetail } from '../interfaces/team/team-detail.model';
 
 @Injectable({
   providedIn: 'root',
@@ -15,6 +16,7 @@ export class TeamEndpointService {
     private http: HttpClient,
     @Inject('apiUrl') private baseUrl: string,
   ) {}
+
   getAllFilteredAndPagedTeams(
     filters: BaseFiltersDto,
     pagingSettings: PagedListConfiguration,
@@ -24,9 +26,15 @@ export class TeamEndpointService {
       params,
     });
   }
+
   getAllTeams(): Observable<Team[]> {
     return this.http.get<Team[]>(`${this.baseUrl}/teams`);
   }
+
+  getTeamDetail(teamId: string): Observable<TeamDetail> {
+    return this.http.get<TeamDetail>(`${this.baseUrl}/teams/${teamId}/detail`);
+  }
+
   deleteTeam(teamId: string) {
     return this.http.delete<void>(`${this.baseUrl}/teams/${teamId}`);
   }

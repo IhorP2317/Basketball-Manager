@@ -1,7 +1,9 @@
 <div class="team-item-container">
-  <img [src]="team!.id | teamImageSrc" (error)="onError($event)" class="team-logo" alt="{{team?.name}}">
-  <p class="team-name">{{ team?.name }}</p>
-  <div class="item-operations">
+  <div [routerLink]="team!.id">
+    <img [src]="team!.id | teamImageSrc" (error)="onError($event)" class="team-logo" alt="{{team!.name}}">
+    <p class="team-name">{{ team?.name }}</p>
+  </div>
+  <div class="item-operations" *ngIf="isAdmin">
     <button mat-icon-button aria-label="Edit team" class="edit-button" matTooltip="Edit team">
       <mat-icon>edit</mat-icon>
     </button>

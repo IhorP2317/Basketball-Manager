@@ -5,7 +5,7 @@
       <div class="select-filters">
         <mat-form-field appearance="fill">
           <mat-label>Choose a role</mat-label>
-          <mat-select formControlName="role" (selectionChange)="onSelectedRoleChange()">
+          <mat-select formControlName="role">
             <mat-option *ngFor="let role of roles" [value]="role.value">
               {{ role.value }}
             </mat-option>
@@ -13,7 +13,7 @@
         </mat-form-field>
         <mat-form-field appearance="fill">
           <mat-label>Choose an email status</mat-label>
-          <mat-select formControlName="emailStatus" (selectionChange)="onSelectedStatusChange()">
+          <mat-select formControlName="emailStatus">
             <mat-option *ngFor="let status of statuses" [value]="status.value">
               {{ status.value }}
             </mat-option>
@@ -23,8 +23,7 @@
 
       <div class="search-container">
         <mat-form-field class="full-width-input" appearance="outline">
-          <input matInput placeholder="Search a user" formControlName="searchUser" (input)="onSearchedUserChange()"
-                 type="text">
+          <input matInput placeholder="Search a user" formControlName="searchUser" type="text">
         </mat-form-field>
       </div>
     </form>

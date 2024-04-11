@@ -1,0 +1,18 @@
+<div class="staff-item-container">
+  <img [src]="coach.id | staffImageSrc" class="staff-image" (error)="onError($event)"
+       [alt]="coach.firstName + ' ' + coach.lastName ">
+  <div class="coach-info">
+    <p class="coach-name">{{ coach.firstName }} {{ coach.lastName }}</p>
+    <p class="coach-status">{{ coach.coachStatus }}</p>
+    <div class="item-operations" *ngIf="isAdmin">
+      <button mat-icon-button aria-label="Edit coach" (click)="onUpdateClicked()" class="edit-button"
+              matTooltip="Edit coach">
+        <mat-icon>edit</mat-icon>
+      </button>
+      <button mat-icon-button aria-label="Delete coach" class="delete-button" (click)="onDeleteClicked()"
+              matTooltip="Delete coach">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </div>
+  </div>
+</div>

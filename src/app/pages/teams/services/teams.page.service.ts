@@ -5,6 +5,7 @@ import {
   catchError,
   combineLatest,
   debounceTime,
+  distinctUntilChanged,
   of,
   switchMap,
   tap,
@@ -31,7 +32,9 @@ export class TeamsPageService {
     null,
   );
 
-  public filters$ = this.filtersSubject.asObservable().pipe(debounceTime(300));
+  public filters$ = this.filtersSubject
+    .asObservable()
+    .pipe(debounceTime(300), distinctUntilChanged());
   public pagedListSettings$ = this.pagedListSettingsSubject.asObservable();
   public pagedListTeams$ = this.pagedListTeamsSubject.asObservable();
 
@@ -41,6 +44,9 @@ export class TeamsPageService {
 
   changeFilters(newFilters: BaseFiltersDto): void {
     this.filtersSubject.next(newFilters);
+    const currentPageListSettings = this.pagedListSettingsSubject.value;
+    const updatedPageListSettings = { ...currentPageListSettings, page: 1 };
+    this.changePagedListSettings(updatedPageListSettings);
   }
 
   changePagedListSettings(pagedListSettings: PagedListConfiguration): void {
@@ -71,6 +77,14 @@ export class TeamsPageService {
       .deleteTeam(teamId)
       .pipe(
         tap(() => {
+          if (
+            this.pagedListTeamsSubject.value!.hasPreviousPage &&
+            this.pagedListTeamsSubject.value!.items.length === 1
+          ) {
+            const pageListSettings = this.pagedListSettingsSubject.value;
+            pageListSettings.page = pageListSettings.page - 1;
+            this.changePagedListSettings(pageListSettings);
+          }
           this.refreshTeams();
         }),
         catchError((error) => {

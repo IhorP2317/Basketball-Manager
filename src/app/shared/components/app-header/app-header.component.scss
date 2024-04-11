@@ -1,4 +1,5 @@
 @import '../../../../variables.scss';
+
 .header {
   background: linear-gradient(to right, $primary-dark, $primary-light);
   display: flex;
@@ -13,16 +14,18 @@
     flex-direction: row;
     justify-content: space-between;
     flex-grow: 1;
+    align-items: center;
 
     .platform-name {
       font-size: 24px;
+      text-align: center;
     }
 
     span {
       color: white;
       margin: 10px;
       font-weight: 100;
-      text-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      text-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
       padding: 0 10px;
       line-height: 1.5;
     }
@@ -32,14 +35,33 @@
       flex-direction: row;
       align-items: center;
       gap: 25px;
+
       a {
         text-decoration: none;
         color: inherit;
       }
+
       .custom-icon {
         fill: white;
         width: 40px;
         height: 40px;
+      }
+
+      .user-profile {
+        margin-top: 10px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+
+        .current-user-image {
+          width: 50px;
+          height: 50px;
+          border-radius: 50%;
+          object-fit: cover;
+          border: 2px solid white;
+        }
+
       }
 
       .fa-user-circle {

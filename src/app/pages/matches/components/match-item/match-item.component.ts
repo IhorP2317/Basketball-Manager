@@ -8,6 +8,7 @@ import { Match } from '../../../../core/interfaces/match/match.model';
 })
 export class MatchItemComponent {
   @Input() match?: Match;
+  @Input() isAdmin: boolean = false;
   @Output() deleteRequest = new EventEmitter<string>();
 
   constructor(@Inject('apiUrl') private baseUrl: string) {}

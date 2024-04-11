@@ -1,10 +1,9 @@
-import { Inject, Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
 import {
   BehaviorSubject,
   catchError,
   combineLatest,
-  Observable,
+  distinctUntilChanged,
   of,
   switchMap,
   tap,
@@ -18,6 +17,7 @@ import { MatchEndpointService } from '../../../core/services/match.endpoint.serv
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { TeamEndpointService } from '../../../core/services/team.endpoint.service';
 import { Team } from '../../../core/interfaces/team/team.model';
+
 @UntilDestroy()
 @Injectable()
 export class MatchesPageService {
@@ -37,11 +37,14 @@ export class MatchesPageService {
   ]);
   private teamsSubject = new BehaviorSubject<Team[] | null>(null);
 
-  public filters$ = this.filtersSubject.asObservable();
+  public filters$ = this.filtersSubject
+    .asObservable()
+    .pipe(distinctUntilChanged());
   public pagedListSettings$ = this.pagedListSettingsSubject.asObservable();
   public pagedListMatches$ = this.pagedListMatchesSubject.asObservable();
   public yearsFilters$ = this.yearsFiltersSubject.asObservable();
-public teams$ = this.teamsSubject.asObservable();
+  public teams$ = this.teamsSubject.asObservable();
+
   constructor(
     private matchEndpointService: MatchEndpointService,
     private teamEndpointService: TeamEndpointService,
@@ -54,6 +57,7 @@ public teams$ = this.teamsSubject.asObservable();
   changeFilters(newFilters: MatchFiltersDto): void {
     this.filtersSubject.next(newFilters);
   }
+
   setPreviousMonth() {
     const filters = this.filtersSubject.value;
     const currentDate = moment([filters.year!, filters.month!, 1]);
@@ -65,6 +69,7 @@ public teams$ = this.teamsSubject.asObservable();
       month: currentDate.month(),
     });
   }
+
   setSelectedYear(year: number) {
     const filters = this.filtersSubject.value;
 
@@ -73,6 +78,7 @@ public teams$ = this.teamsSubject.asObservable();
       year: year,
     });
   }
+
   setSelectedTeam(team: string | null) {
     const filters = this.filtersSubject.value;
 
@@ -81,6 +87,7 @@ public teams$ = this.teamsSubject.asObservable();
       teamName: team,
     });
   }
+
   setNextMonth() {
     const filters = this.filtersSubject.value;
     const currentDate = moment([filters.year!, filters.month!, 1]);
@@ -107,6 +114,7 @@ public teams$ = this.teamsSubject.asObservable();
       )
       .subscribe();
   }
+
   private loadMatchesList$(
     filters: MatchFiltersDto,
     pagedListSettings: PagedListConfiguration,
@@ -119,6 +127,7 @@ public teams$ = this.teamsSubject.asObservable();
         }),
       );
   }
+
   deleteMatch(matchId: string) {
     this.matchEndpointService
       .deleteMatch(matchId)
@@ -134,10 +143,13 @@ public teams$ = this.teamsSubject.asObservable();
       )
       .subscribe();
   }
+
   private refreshMatches() {
     const currentFilters = this.filtersSubject.value;
     const currentPagedListSettings = this.pagedListSettingsSubject.value;
-    this.loadMatchesList$(currentFilters, currentPagedListSettings).pipe(untilDestroyed(this)).subscribe();
+    this.loadMatchesList$(currentFilters, currentPagedListSettings)
+      .pipe(untilDestroyed(this))
+      .subscribe();
     this.loadMatchYears$().pipe(untilDestroyed(this)).subscribe();
   }
 
@@ -148,6 +160,7 @@ public teams$ = this.teamsSubject.asObservable();
       }),
     );
   }
+
   private loadMatchTeams$() {
     return this.teamEndpointService.getAllTeams().pipe(
       tap((teams) => {

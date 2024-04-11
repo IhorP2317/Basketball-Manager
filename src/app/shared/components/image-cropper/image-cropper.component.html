@@ -1,0 +1,11 @@
+<div class="image-cropper-container">
+  <img id="image" class="cropped-image" [src]="sanitizedUrl">
+  <div class="crop-actions">
+    <button class="button-secondary" mat-flat-button (click)="reset()">
+      Reset
+    </button>
+    <button class="button-primary" mat-flat-button (click)="crop()">
+      Ok
+    </button>
+  </div>
+</div>

@@ -1,6 +1,5 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
-import {Match} from "../../../../core/interfaces/match/match.model";
-
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Match } from '../../../../core/interfaces/match/match.model';
 
 @Component({
   selector: 'matches-list',
@@ -10,7 +9,9 @@ import {Match} from "../../../../core/interfaces/match/match.model";
 export class MatchesListComponent {
   @Input() listHeader!: string;
   @Input() matches: Match[] = [];
+  @Input() isAdmin: boolean = false;
   @Output() deleteMatch = new EventEmitter<string>();
+
   onDeleteRequested(matchId: string) {
     this.deleteMatch.emit(matchId);
   }

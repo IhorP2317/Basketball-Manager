@@ -5,7 +5,6 @@ import {
   BehaviorSubject,
   catchError,
   combineLatest,
-  debounceTime,
   of,
   switchMap,
   tap,
@@ -31,16 +30,22 @@ export class UsersPageService {
     null,
   );
 
-  public filters$ = this.filtersSubject.asObservable().pipe(debounceTime(300));
+  public filters$ = this.filtersSubject.asObservable();
   public pagedListSettings$ = this.pagedListSettingsSubject.asObservable();
   public pagedListUsers$ = this.pagedListUsersSubject.asObservable();
 
   constructor(private userEndpointService: UserEndpointService) {
     this.onFiltersAndPagingChange();
+    this.refreshUsers();
   }
 
   changeFilters(newFilters: UserFiltersDto): void {
     this.filtersSubject.next(newFilters);
+    const updatedPageListSettings = {
+      ...this.pagedListSettingsSubject.value,
+      page: 1,
+    };
+    this.changePagedListSettings(updatedPageListSettings);
   }
 
   changePagedListSettings(pagedListSettings: PagedListConfiguration): void {
@@ -97,6 +102,14 @@ export class UsersPageService {
       .deleteUser(userId)
       .pipe(
         tap(() => {
+          if (
+            this.pagedListUsersSubject.value!.hasPreviousPage &&
+            this.pagedListUsersSubject.value!.items.length === 1
+          ) {
+            const pageListSettings = this.pagedListSettingsSubject.value;
+            pageListSettings.page = pageListSettings.page - 1;
+            this.changePagedListSettings(pageListSettings);
+          }
           this.refreshUsers();
         }),
         catchError((error) => {

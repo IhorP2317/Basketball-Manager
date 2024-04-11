@@ -8,10 +8,16 @@ import { Player } from '../../../../core/interfaces/player/player.model';
 })
 export class PlayerItemComponent {
   @Input() player?: Player | null;
+  @Input() isAdmin: boolean = false;
   @Output() deleteRequest = new EventEmitter<Player>();
+  @Output() updateRequest = new EventEmitter<Player>();
 
   onDeleteClicked() {
     this.deleteRequest.emit(this.player!);
+  }
+
+  onUpdateClicked() {
+    this.updateRequest.emit(this.player!);
   }
 
   onError(event: Event) {
