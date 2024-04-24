@@ -1,6 +1,8 @@
 <div class="staff-item-container">
-  <img [src]="player.id | staffImageSrc" class="staff-image" (error)="onError($event)"
-       [alt]="player.firstName + ' ' + player.lastName">
+  <div [routerLink]="['/players', player.id]">
+    <img [src]="player.id | playerImageSrc" class="staff-image" (error)="onError($event)"
+         [alt]="player.firstName + ' ' + player.lastName">
+  </div>
   <div class="player-info">
     <p class="player-name">{{ player.firstName }} {{ player.lastName }}</p>
     <p class="player-number">#{{ player.jerseyNumber }}</p>

@@ -4,7 +4,8 @@
     <p class="team-name">{{ team?.name }}</p>
   </div>
   <div class="item-operations" *ngIf="isAdmin">
-    <button mat-icon-button aria-label="Edit team" class="edit-button" matTooltip="Edit team">
+    <button mat-icon-button aria-label="Edit team" class="edit-button" (click)="onUpdateClicked()"
+            matTooltip="Edit team">
       <mat-icon>edit</mat-icon>
     </button>
     <button mat-icon-button aria-label="Delete team" class="delete-button" (click)="onDeleteClicked()"

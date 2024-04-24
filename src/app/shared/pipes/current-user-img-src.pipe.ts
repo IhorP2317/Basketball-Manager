@@ -6,9 +6,11 @@ import { Inject, Pipe, PipeTransform } from '@angular/core';
 export class CurrentImageSrcPipe implements PipeTransform {
   constructor(@Inject('apiUrl') private baseUrl: string) {}
 
-  transform(userId: string): string {
+  transform(userId: string | null): string {
     if (userId) {
-      return `${this.baseUrl}/users/${userId}/avatar`;
+      const url = `${this.baseUrl}/users/${userId}/avatar?randomise=${Math.random()}`;
+      console.log(url);
+      return url;
     }
     return `assets/images/empty-staff.png`;
   }

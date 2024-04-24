@@ -1,0 +1,45 @@
+<mat-card class="team-card">
+  <h1>{{ action }} Team</h1>
+  <mat-card-content class="team-card-content">
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+      <div class="image-container">
+        <app-avatar (handleFileChange)="handleImageFile($event)" [formControl]="form.controls.avatar"></app-avatar>
+      </div>
+
+      <p *ngIf="errorMessage != null">{{ errorMessage }}</p>
+      <div class="personal-info-group full-width">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>First Name</mat-label>
+          <input
+            matInput
+            placeholder="Team's name"
+            type="text"
+            [formControl]="form.controls.name"
+          />
+
+          <mat-error
+            *ngIf="
+              form.controls.name?.dirty || form.controls.name?.touched
+            "
+          >
+            <span *ngIf="form.controls.name?.hasError('required')"
+            >Team name is <strong>required</strong></span
+            >
+            <span *ngIf="form.controls.name?.hasError('pattern')"
+            >Please enter a valid team name</span
+            >
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="button-action-container">
+        <button
+          class="button-primary full-width"
+          mat-raised-button
+          type="submit"
+        >
+          {{ action }}
+        </button>
+      </div>
+    </form>
+  </mat-card-content>
+</mat-card>

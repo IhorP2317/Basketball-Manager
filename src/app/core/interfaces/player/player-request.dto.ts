@@ -1,4 +1,4 @@
-import { PlayerExperienceDto } from '../player-experience/player-experience.dto';
+import { StaffExperienceDto } from '../staff-experience/staff-experience.dto';
 
 export interface PlayerRequestDto {
   lastName: string;
@@ -10,5 +10,5 @@ export interface PlayerRequestDto {
   teamId: string | null;
   position: string | null;
   jerseyNumber: number;
-  playerExperiences: PlayerExperienceDto[] | null;
+  playerExperiences: StaffExperienceDto[] | null;
 }

@@ -6,7 +6,14 @@ import { PlayerService } from '../../shared/services/player.service';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogData } from '../../core/interfaces/dialog/dialog-data';
 import { ConfirmationDialogComponent } from '../../shared/components/dialog/confirmation-dialog.component';
-import { debounceTime, distinctUntilChanged, filter, map, take } from 'rxjs';
+import {
+  debounceTime,
+  distinctUntilChanged,
+  filter,
+  map,
+  switchMap,
+  take,
+} from 'rxjs';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import {
   AbstractControl,
@@ -21,12 +28,13 @@ import { PlayerActionsForm } from '../../core/interfaces/forms/player/player-act
 import { NAME_PATTERN } from '../../shared/constants/form.constant';
 import { dateValidator } from '../../shared/validators/form-validators';
 import moment from 'moment/moment';
-import { PlayerExperienceForm } from '../../core/interfaces/forms/player-experience/player-experience-form';
+import { StaffExperienceForm } from '../../core/interfaces/forms/staff-experience/staff-experience-form';
 import {
   COUNTRIES_DB,
   Country,
 } from '@angular-material-extensions/select-country';
 import { ImageInspectorService } from '../../shared/services/image-inspector.service';
+import { PlayerRequestDto } from '../../core/interfaces/player/player-request.dto';
 
 @UntilDestroy()
 @Component({
@@ -36,9 +44,9 @@ import { ImageInspectorService } from '../../shared/services/image-inspector.ser
 })
 export class PlayersComponent implements OnInit {
   countries: Country[] = COUNTRIES_DB;
+  positions = PLAYER_FILTER_POSITIONS;
   playerFiltersForm!: FormGroup;
   playerActionsForm!: FormGroup<PlayerActionsForm>;
-  positions = PLAYER_FILTER_POSITIONS;
   currentSortColumn: string = 'default';
   isDescendingSortingOrder = false;
   selectTeams$ = this.playersPageService.teams$;
@@ -105,14 +113,13 @@ export class PlayersComponent implements OnInit {
     this.playerActionsForm.controls.jerseyNumber.setValue(player.jerseyNumber);
     this.playerActionsForm.controls.position.setValue(player.position);
     this.playerActionsForm.controls.experiences.setValue([]);
-    const avatarUrl = `/players/${player.id}/avatar`;
+    const avatarUrl = this.apiUrl + `/players/${player.id}/avatar`;
 
     this.imageInspectorService
       .checkImageURL(avatarUrl)
       .pipe(take(1), untilDestroyed(this))
       .subscribe((exists) => {
-        const avatarValue = exists ? this.apiUrl + avatarUrl : null;
-        console.log(avatarValue);
+        const avatarValue = exists ? avatarUrl : null;
         this.playerActionsForm.controls.avatar.setValue(avatarValue);
       });
   }
@@ -147,7 +154,7 @@ export class PlayersComponent implements OnInit {
         Validators.required,
         Validators.min(0),
       ]),
-      experiences: new FormArray<FormGroup<PlayerExperienceForm>>([]),
+      experiences: new FormArray<FormGroup<StaffExperienceForm>>([]),
       avatar: new FormControl(null),
     });
   }
@@ -204,6 +211,27 @@ export class PlayersComponent implements OnInit {
       });
   }
 
+  handleUpdatePlayer(eventData: {
+    id: string;
+    playerDto: PlayerRequestDto;
+    playerImage: File | null | undefined;
+  }) {
+    this.playersPageService
+      .updatePlayer$(eventData.id, eventData.playerDto, eventData.playerImage)
+      .pipe(untilDestroyed(this))
+      .subscribe();
+  }
+
+  handleCreatePlayer(eventData: {
+    playerDto: PlayerRequestDto;
+    playerImage: File | null | undefined;
+  }) {
+    this.playersPageService
+      .createPlayer$(eventData.playerDto, eventData.playerImage)
+      .pipe(untilDestroyed(this))
+      .subscribe();
+  }
+
   onDeletePlayerClicked(player: Player): void {
     const dialogData: DialogData = {
       title: 'Confirm Action',
@@ -216,9 +244,10 @@ export class PlayersComponent implements OnInit {
       .afterClosed()
       .pipe(
         filter((result) => result),
+        switchMap(() => this.playersPageService.deletePlayer$(player.id)),
         untilDestroyed(this),
       )
-      .subscribe(() => this.playersPageService.deletePlayer(player.id));
+      .subscribe();
   }
 
   onSortColumnClicked(sortColumn: string) {

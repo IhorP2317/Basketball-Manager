@@ -1,9 +1,13 @@
 <div class="staff-item-container">
-  <img [src]="coach.id | staffImageSrc" class="staff-image" (error)="onError($event)"
-       [alt]="coach.firstName + ' ' + coach.lastName ">
+  <div [routerLink]="['/coaches', coach.id]">
+    <img [src]="coach.id | coachImageSrc" class="staff-image" (error)="onError($event)"
+         [alt]="coach.firstName + ' ' + coach.lastName ">
+  </div>
   <div class="coach-info">
-    <p class="coach-name">{{ coach.firstName }} {{ coach.lastName }}</p>
-    <p class="coach-status">{{ coach.coachStatus }}</p>
+    <div [routerLink]="['/coaches', coach.id]">
+      <p class="coach-name">{{ coach.firstName }} {{ coach.lastName }}</p>
+      <p class="coach-status">{{ coach.coachStatus }}</p>
+    </div>
     <div class="item-operations" *ngIf="isAdmin">
       <button mat-icon-button aria-label="Edit coach" (click)="onUpdateClicked()" class="edit-button"
               matTooltip="Edit coach">

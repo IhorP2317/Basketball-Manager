@@ -5,6 +5,7 @@ import {
   BehaviorSubject,
   catchError,
   combineLatest,
+  forkJoin,
   of,
   switchMap,
   tap,
@@ -13,6 +14,13 @@ import { UserFiltersDto } from '../../../core/interfaces/user/user-filters.dto';
 import { PagedListConfiguration } from '../../../core/interfaces/paged-list/paged-list-configuration.dto';
 import { PagedList } from '../../../core/interfaces/paged-list/paged-list.model';
 import { User } from '../../../core/interfaces/user/user.model';
+import { UserSignupDto } from '../../../core/interfaces/user/user-signup.dto';
+import { AuthEndpointService } from '../../../core/services/auth.endpoint.service';
+import { HttpErrorResponse } from '@angular/common/http';
+import { ApiErrorHandler } from '../../../core/helpers/api-error-handler.helper';
+import { AlertService } from '../../../shared/services/alert.service';
+import { UserUpdateDto } from '../../../core/interfaces/user/user-update.dto';
+import { CurrentUserService } from '../../../shared/services/current-user.service';
 
 @UntilDestroy()
 @Injectable()
@@ -34,7 +42,12 @@ export class UsersPageService {
   public pagedListSettings$ = this.pagedListSettingsSubject.asObservable();
   public pagedListUsers$ = this.pagedListUsersSubject.asObservable();
 
-  constructor(private userEndpointService: UserEndpointService) {
+  constructor(
+    private userEndpointService: UserEndpointService,
+    private authService: AuthEndpointService,
+    private alertService: AlertService,
+    private currentUserService: CurrentUserService,
+  ) {
     this.onFiltersAndPagingChange();
     this.refreshUsers();
   }
@@ -92,6 +105,104 @@ export class UsersPageService {
         switchMap(([filters, pagedListSettings]) =>
           this.loadUsersList$(filters, pagedListSettings),
         ),
+        untilDestroyed(this),
+      )
+      .subscribe();
+  }
+
+  createUser(
+    user: UserSignupDto,
+    role: string,
+    userImage?: File | null,
+    balance?: number | null,
+  ) {
+    let userRegistration$;
+
+    console.log(role);
+    if (role === 'Admin') {
+      userRegistration$ = this.authService.registerAdmin(user);
+    } else {
+      userRegistration$ = this.authService.signUp(user);
+    }
+
+    userRegistration$
+      .pipe(
+        switchMap((registeredUser) => {
+          const avatarUpdate$ = userImage
+            ? this.userEndpointService.updateUserAvatar(
+                registeredUser.id,
+                userImage,
+              )
+            : of(null);
+
+          const balanceUpdate$ =
+            balance != null
+              ? this.userEndpointService.updateUserBalance(
+                  registeredUser.id,
+                  balance,
+                )
+              : of(null);
+
+          return forkJoin({
+            avatarUpdate: avatarUpdate$,
+            balanceUpdate: balanceUpdate$,
+          });
+        }),
+        tap(() => this.refreshUsers()),
+        catchError((error: HttpErrorResponse) =>
+          ApiErrorHandler.handleError(error, this.alertService),
+        ),
+        untilDestroyed(this),
+      )
+      .subscribe();
+  }
+
+  updateUser(
+    userId: string,
+    user: UserUpdateDto,
+    userImage?: File | null | undefined,
+    balance?: number | null | undefined,
+  ) {
+    this.userEndpointService
+      .updateUser(userId, user)
+      .pipe(
+        tap(() => {
+          const currentUser = this.currentUserService.getCurrentUser();
+          if (currentUser?.id === userId) {
+            this.currentUserService.setCurrentUser({
+              ...currentUser,
+              firstName: user.firstName,
+              lastName: user.lastName,
+            });
+          }
+        }),
+        switchMap(() => {
+          const avatarUpdate$ = userImage
+            ? this.userEndpointService
+                .updateUserAvatar(userId, userImage)
+                .pipe(
+                  catchError((response: HttpErrorResponse) =>
+                    ApiErrorHandler.handleError(response, this.alertService),
+                  ),
+                )
+            : of(null);
+
+          const balanceUpdate$ =
+            balance != null
+              ? this.userEndpointService
+                  .updateUserBalance(userId, balance)
+                  .pipe(
+                    catchError((response: HttpErrorResponse) =>
+                      ApiErrorHandler.handleError(response, this.alertService),
+                    ),
+                  )
+              : of(null);
+          return forkJoin({
+            avatarUpdate: avatarUpdate$,
+            balanceUpdate: balanceUpdate$,
+          });
+        }),
+        tap(() => this.refreshUsers()),
         untilDestroyed(this),
       )
       .subscribe();

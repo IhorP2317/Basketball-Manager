@@ -1,9 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
 import { CurrentUserService } from '../../services/current-user.service';
 import { User } from '../../../core/interfaces/user/user.model';
-import { filter, Observable } from 'rxjs';
+import { filter, map, Observable } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogData } from '../../../core/interfaces/dialog/dialog-data';
 import { ConfirmationDialogComponent } from '../dialog/confirmation-dialog.component';
@@ -20,6 +20,8 @@ export class AppHeaderComponent {
   public platformName: string = 'B - BALL DATA';
   public currentUser$: Observable<User | null>;
   showUserContent$ = this.navigationService.showUserContent$;
+  public currentUserId$: Observable<string | null>;
+  imageUrl!: string;
 
   constructor(
     private matIconRegistry: MatIconRegistry,
@@ -27,8 +29,12 @@ export class AppHeaderComponent {
     private currentUserService: CurrentUserService,
     public dialog: MatDialog,
     private navigationService: NavigationService,
+    @Inject('apiUrl') private baseUrl: string,
   ) {
-    this.currentUser$ = this.currentUserService.currentUser$;
+    this.currentUser$ = this.currentUserService.currentUser$.pipe();
+    this.currentUserId$ = this.currentUser$.pipe(
+      map((user) => (user ? user.id : user)),
+    );
     this.matIconRegistry.addSvgIcon(
       'ticket-icon',
       this.domSanitizer.bypassSecurityTrustResourceUrl(

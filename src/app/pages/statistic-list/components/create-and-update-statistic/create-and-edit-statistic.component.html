@@ -1,0 +1,305 @@
+<mat-card class="statistic-card">
+  <h1>{{ action }} Statistic</h1>
+  <mat-card-content class="statistic-card-content">
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+
+      <p *ngIf="errorMessage != null">{{ errorMessage }}</p>
+      <div class="experience-group full-width">
+        <mat-form-field class="full-width" appearance="outline" *ngIf="action == 'Create'">
+          <mat-label>Player</mat-label>
+          <mat-select [formControl]="form.controls.playerExperience">
+            <mat-option *ngFor="let playerExperience of playerExperiences"
+                        [value]="playerExperience">{{ playerExperience.fullName + ' (' + playerExperience.teamName + ')' }}
+            </mat-option>
+          </mat-select>
+          <mat-error
+            *ngIf="
+                  form.controls.playerExperience?.dirty || form.controls.playerExperience?.touched
+                  "
+          >
+                  <span *ngIf="form.controls.playerExperience?.hasError('required')"
+                  >Player is <strong>required</strong></span
+                  >
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="full-width" *ngIf="action == 'Create'">
+          <mat-label>Time Unit</mat-label>
+          <input matInput type="number" [formControl]="form.controls.timeUnit" step="1" [min]="minTimeUnit">
+          <mat-error
+            *ngIf="
+                    form.controls.timeUnit?.dirty || form.controls.timeUnit?.touched
+                  "
+          >
+                  <span *ngIf="form.controls.timeUnit?.hasError('required')"
+                  >Time unit is <strong>required</strong></span
+                  >
+            <span *ngIf="form.controls.timeUnit?.hasError('min')"
+            >Time unit is too low</span
+            >
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="time-group">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Court minutes</mat-label>
+          <input matInput type="number" [formControl]="form.controls.minutes" step="1" [min]="minFieldValue"
+                 [max]='maxMinute'>
+          <mat-error
+            *ngIf="
+                    form.controls.minutes?.dirty || form.controls.minutes?.touched
+                  "
+          >
+                  <span *ngIf="form.controls.minutes?.hasError('required')"
+                  >Court minutes is <strong>required</strong></span
+                  >
+            <span *ngIf="form.controls.minutes?.hasError('min') || form.controls.minutes?.hasError('max')"
+            >Invalid Court minutes</span
+            >
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label> Court seconds</mat-label>
+          <input matInput type="number" [formControl]="form.controls.seconds" step="1" [min]="minFieldValue"
+                 [max]='maxSecond'>
+          <mat-error
+            *ngIf="
+                    form.controls.seconds?.dirty || form.controls.seconds?.touched
+                  "
+          >
+                  <span *ngIf="form.controls.seconds?.hasError('required')"
+                  >Court seconds is <strong>required</strong></span
+                  >
+            <span *ngIf="form.controls.seconds?.hasError('min') || form.controls.seconds?.hasError('max')"
+            >Invalid Court seconds</span
+            >
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="statistic-group">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>FT make</mat-label>
+          <input matInput type="number" [formControl]="form.controls.onePointShotHitCount" step="1"
+                 [min]="minFieldValue">
+          <mat-error
+            *ngIf="
+                    form.controls.onePointShotHitCount?.dirty || form.controls.onePointShotHitCount?.touched
+                  "
+          >
+                  <span *ngIf="form.controls.onePointShotHitCount?.hasError('required')"
+                  >FT make is <strong>required</strong></span
+                  >
+            <span *ngIf="form.controls.onePointShotHitCount?.hasError('min')"
+            >Ft make is too low</span
+            >
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>FT miss</mat-label>
+          <input matInput type="number" [formControl]="form.controls.onePointShotMissCount" step="1"
+                 [min]="minFieldValue">
+          <mat-error
+            *ngIf="
+                    form.controls.onePointShotMissCount?.dirty || form.controls.onePointShotMissCount?.touched
+                  "
+          >
+                  <span *ngIf="form.controls.onePointShotMissCount?.hasError('required')"
+                  >FT miss is <strong>required</strong></span
+                  >
+            <span *ngIf="form.controls.onePointShotMissCount?.hasError('min')"
+            >Ft miss is too low</span
+            >
+          </mat-error>
+        </mat-form-field>
+
+
+      </div>
+      <div class="statistic-group">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>2FG make</mat-label>
+          <input matInput type="number" [formControl]="form.controls.twoPointShotHitCount" step="1"
+                 [min]="minFieldValue">
+          <mat-error
+            *ngIf="
+                    form.controls.twoPointShotHitCount?.dirty || form.controls.twoPointShotHitCount?.touched
+                  "
+          >
+                  <span *ngIf="form.controls.twoPointShotHitCount?.hasError('required')"
+                  >2FG make is <strong>required</strong></span
+                  >
+            <span *ngIf="form.controls.twoPointShotHitCount?.hasError('min')"
+            >2FG make is too low</span
+            >
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>2FG miss</mat-label>
+          <input matInput type="number" [formControl]="form.controls.twoPointShotMissCount" step="1"
+                 [min]="minFieldValue">
+          <mat-error
+            *ngIf="
+                    form.controls.twoPointShotMissCount?.dirty || form.controls.twoPointShotMissCount?.touched
+                  "
+          >
+                  <span *ngIf="form.controls.twoPointShotMissCount?.hasError('required')"
+                  >2FG miss is <strong>required</strong></span
+                  >
+            <span *ngIf="form.controls.twoPointShotMissCount?.hasError('min')"
+            >2FG miss is too low</span
+            >
+          </mat-error>
+        </mat-form-field>
+
+      </div>
+      <div class="statistic-group">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>3FG make</mat-label>
+          <input matInput type="number" [formControl]="form.controls.threePointShotHitCount" step="1"
+                 [min]="minFieldValue">
+          <mat-error
+            *ngIf="
+                    form.controls.threePointShotHitCount?.dirty || form.controls.threePointShotHitCount?.touched
+                  "
+          >
+                  <span *ngIf="form.controls.threePointShotHitCount?.hasError('required')"
+                  >3FG make is <strong>required</strong></span
+                  >
+            <span *ngIf="form.controls.threePointShotHitCount?.hasError('min')"
+            >3FG make is too low</span
+            >
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>3FG miss</mat-label>
+          <input matInput type="number" [formControl]="form.controls.threePointShotMissCount" step="1"
+                 [min]="minFieldValue">
+          <mat-error
+            *ngIf="
+                    form.controls.threePointShotMissCount?.dirty || form.controls.threePointShotMissCount?.touched
+                  "
+          >
+                  <span *ngIf="form.controls.threePointShotMissCount?.hasError('required')"
+                  >3FG miss is <strong>required</strong></span
+                  >
+            <span *ngIf="form.controls.threePointShotMissCount?.hasError('min')"
+            >3FG miss is too low</span
+            >
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="statistic-group">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Assists</mat-label>
+          <input matInput type="number" [formControl]="form.controls.assistCount" step="1" [min]="minFieldValue">
+          <mat-error
+            *ngIf="
+                    form.controls.assistCount?.dirty || form.controls.assistCount?.touched
+                  "
+          >
+                  <span *ngIf="form.controls.assistCount?.hasError('required')"
+                  >Assists are <strong>required</strong></span
+                  >
+            <span *ngIf="form.controls.assistCount?.hasError('min')"
+            >Assists are too low</span
+            >
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Steals</mat-label>
+          <input matInput type="number" [formControl]="form.controls.stealCount" step="1" [min]="minFieldValue">
+          <mat-error
+            *ngIf="
+                    form.controls.stealCount?.dirty || form.controls.stealCount?.touched
+                  "
+          >
+                  <span *ngIf="form.controls.stealCount?.hasError('required')"
+                  >Steals are <strong>required</strong></span
+                  >
+            <span *ngIf="form.controls.stealCount?.hasError('min')"
+            >Steals are too low</span
+            >
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="statistic-group">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Offensive rebounds</mat-label>
+          <input matInput type="number" [formControl]="form.controls.offensiveReboundCount" step="1"
+                 [min]="minFieldValue">
+          <mat-error
+            *ngIf="
+                    form.controls.offensiveReboundCount?.dirty || form.controls.offensiveReboundCount?.touched
+                  "
+          >
+                  <span *ngIf="form.controls.offensiveReboundCount?.hasError('required')"
+                  >Rebounds are <strong>required</strong></span
+                  >
+            <span *ngIf="form.controls.offensiveReboundCount?.hasError('min')"
+            >Rebounds are too low</span
+            >
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Defensive rebounds</mat-label>
+          <input matInput type="number" [formControl]="form.controls.defensiveReboundCount" step="1"
+                 [min]="minFieldValue">
+          <mat-error
+            *ngIf="
+                    form.controls.defensiveReboundCount?.dirty || form.controls.defensiveReboundCount?.touched
+                  "
+          >
+                  <span *ngIf="form.controls.defensiveReboundCount?.hasError('required')"
+                  >Rebounds are <strong>required</strong></span
+                  >
+            <span *ngIf="form.controls.defensiveReboundCount?.hasError('min')"
+            >Rebounds are too low</span
+            >
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="statistic-group">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Blocks</mat-label>
+          <input matInput type="number" [formControl]="form.controls.blockCount" step="1" [min]="minFieldValue">
+          <mat-error
+            *ngIf="
+                    form.controls.blockCount?.dirty || form.controls.blockCount?.touched
+                  "
+          >
+                  <span *ngIf="form.controls.blockCount?.hasError('required')"
+                  >Blocks are <strong>required</strong></span
+                  >
+            <span *ngIf="form.controls.blockCount?.hasError('min')"
+            >Blocks are too low</span
+            >
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Turnovers</mat-label>
+          <input matInput type="number" [formControl]="form.controls.turnoverCount" step="1" [min]="minFieldValue">
+          <mat-error
+            *ngIf="
+                    form.controls.turnoverCount?.dirty || form.controls.turnoverCount?.touched
+                  "
+          >
+                  <span *ngIf="form.controls.turnoverCount?.hasError('required')"
+                  >Turnovers are <strong>required</strong></span
+                  >
+            <span *ngIf="form.controls.turnoverCount?.hasError('min')"
+            >Turnovers are too low</span
+            >
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="button-action-container">
+        <button
+          class="button-primary full-width"
+          mat-raised-button
+          type="submit"
+        >
+          {{ action }}
+        </button>
+      </div>
+    </form>
+  </mat-card-content>
+</mat-card>

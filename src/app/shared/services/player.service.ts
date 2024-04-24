@@ -7,7 +7,6 @@ import {
   of,
   switchMap,
   tap,
-  throwError,
 } from 'rxjs';
 import { PlayerFiltersDto } from '../../core/interfaces/player/player-filters.dto';
 import { PagedListConfiguration } from '../../core/interfaces/paged-list/paged-list-configuration.dto';
@@ -19,9 +18,9 @@ import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { PlayerRequestDto } from '../../core/interfaces/player/player-request.dto';
 import { AlertService } from './alert.service';
 import { HttpErrorResponse } from '@angular/common/http';
-import { ApiError } from '../../core/interfaces/errors/api-error';
 import { PlayerUpdateDto } from '../../core/interfaces/player/player-update.dto';
-import { PlayerUpdateTeamDto } from '../../core/interfaces/player/player-update-team.dto';
+import { StaffUpdateTeamDto } from '../../core/interfaces/staff/staff-update-team.dto';
+import { ApiErrorHandler } from '../../core/helpers/api-error-handler.helper';
 
 @UntilDestroy()
 @Injectable({
@@ -138,74 +137,61 @@ export class PlayerService {
     });
   }
 
-  deletePlayer(playerId: string) {
-    this.playerEndpointService
-      .deletePlayer(playerId)
-      .pipe(
-        tap(() => {
-          if (
-            this.pagedListPlayersSubject.value!.hasPreviousPage &&
-            this.pagedListPlayersSubject.value!.items.length === 1
-          ) {
-            this.changePagedListSettings({
-              ...this.pagedListSettingsSubject.value,
-              page: this.pagedListSettingsSubject.value.page - 1,
-            });
-          }
-          this.refreshPlayers();
-        }),
-        catchError((error) => {
-          this.alertService.error('Error deleting player: ', error.detail);
-          return throwError(error);
-        }),
-        untilDestroyed(this),
-      )
-      .subscribe();
+  deletePlayer$(playerId: string) {
+    return this.playerEndpointService.deletePlayer(playerId).pipe(
+      tap(() => {
+        if (
+          this.pagedListPlayersSubject.value!.hasPreviousPage &&
+          this.pagedListPlayersSubject.value!.items.length === 1
+        ) {
+          this.changePagedListSettings({
+            ...this.pagedListSettingsSubject.value,
+            page: this.pagedListSettingsSubject.value.page - 1,
+          });
+        }
+        this.refreshPlayers();
+      }),
+      catchError((error) =>
+        ApiErrorHandler.handleError(error, this.alertService),
+      ),
+    );
   }
 
-  createPlayer(player: PlayerRequestDto, playerImage?: File) {
-    this.playerEndpointService
-      .createPlayer(player)
-      .pipe(
-        switchMap((player) =>
-          playerImage
-            ? this.playerEndpointService.updatePlayerAvatar(
-                player.id,
-                playerImage,
-              )
-            : of([]),
-        ),
-        tap(() => {
-          this.refreshPlayers();
-        }),
-        catchError((response: HttpErrorResponse) => {
-          const apiError = response.error as ApiError;
-          let errorMessage = apiError.detail || 'An unknown error occurred';
-          if (apiError.errors) {
-            const errorMessages = Object.entries(apiError.errors)
-              .map(([field, errors]) => `${field}: ${errors.join(', ')}`)
-              .join('; ');
-            errorMessage += `: ${errorMessages}`;
-          }
-
-          this.alertService.error(`Error creating player: ${errorMessage}`);
-
-          return throwError(() => new Error(errorMessage));
-        }),
-        untilDestroyed(this),
-      )
-      .subscribe();
+  createPlayer$(
+    player: PlayerRequestDto,
+    playerImage?: File | null | undefined,
+  ) {
+    return this.playerEndpointService.createPlayer(player).pipe(
+      switchMap((player) =>
+        playerImage
+          ? this.playerEndpointService.updatePlayerAvatar(
+              player.id,
+              playerImage,
+            )
+          : of([]),
+      ),
+      tap(() => {
+        this.refreshPlayers();
+      }),
+      catchError((response: HttpErrorResponse) =>
+        ApiErrorHandler.handleError(response, this.alertService),
+      ),
+    );
   }
 
-  updatePlayer(playerId: string, player: PlayerRequestDto, playerImage?: File) {
+  updatePlayer$(
+    playerId: string,
+    player: PlayerRequestDto,
+    playerImage?: File | null | undefined,
+  ) {
     const playerUpdateDto: PlayerUpdateDto = {
       ...player,
     };
-    const playerUpdateTeamDto: PlayerUpdateTeamDto = {
+    const playerUpdateTeamDto: StaffUpdateTeamDto = {
       newTeamId: player.teamId,
     };
 
-    this.playerEndpointService
+    return this.playerEndpointService
       .updatePlayer(playerId, playerUpdateDto)
       .pipe(
         switchMap(() =>
@@ -225,21 +211,10 @@ export class PlayerService {
 
         tap(() => this.refreshPlayers()),
 
-        catchError((response: HttpErrorResponse) => {
-          const apiError = response.error as ApiError;
-          let errorMessage = apiError.detail || 'An unknown error occurred';
-          if (apiError.errors) {
-            const errorMessages = Object.entries(apiError.errors)
-              .map(([field, errors]) => `${field}: ${errors.join(', ')}`)
-              .join('; ');
-            errorMessage += `: ${errorMessages}`;
-          }
-          this.alertService.error(`Error updating player: ${errorMessage}`);
-          return throwError(() => new Error(errorMessage));
-        }),
-        untilDestroyed(this),
-      )
-      .subscribe();
+        catchError((response: HttpErrorResponse) =>
+          ApiErrorHandler.handleError(response, this.alertService),
+        ),
+      );
   }
 
   private refreshPlayers() {

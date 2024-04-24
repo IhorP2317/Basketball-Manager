@@ -1,0 +1,147 @@
+<div class="match-statistic-container" *ngIf="match">
+  <h1 class="page-head">GAME</h1>
+  <mat-card class="match-card">
+    <mat-card-content class="match-card-content">
+      <div class="match-head">
+        <a routerLink="statistic">
+          <button mat-icon-button class="more-options-button"
+                  *ngIf="isAdminUser()"
+                  aria-label="Manage Match statistic"
+                  matTooltip="Manage Match statistic">
+            <mat-icon>more_vert</mat-icon>
+          </button>
+        </a>
+        <span class="match-date">{{ match | matchTime }}</span>
+        <div class="match-court-info">
+          <div class="match-location">{{ match.location }}</div>
+          <div class="match-attendance">Attendance:{{ match.seatCount * match.rowCount * match.sectionCount }}</div>
+        </div>
+        <div class="match-teams">
+          <div class="match-team home-team">
+            <img
+              class="match-logo"
+              [src]="match!.homeTeamId | matchTeamImageSrc: 'home'"
+              (error)="onError($event, 'home')"
+              alt="{{ match?.homeTeam?.name }}"
+            />
+            <span>{{ match?.homeTeam?.name }}</span>
+            <span>{{ match?.homeTeamScore }}</span>
+          </div>
+          <div class="match-versus">VS</div>
+          <div class="match-team away-team">
+            <img
+              class="match-logo"
+              [src]="match!.awayTeamId | matchTeamImageSrc: 'away'"
+              (error)="onError($event, 'away')"
+              alt="{{ match?.awayTeam?.name }}"
+            />
+            <span>{{ match!.awayTeam?.name }}</span>
+            <span>{{ match!.awayTeamScore }}</span>
+          </div>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+  <form [formGroup]="matchFiltersForm">
+    <div class="app-filters">
+
+      <div class="select-filters">
+        <mat-form-field appearance="fill">
+          <mat-label>Choose a team</mat-label>
+          <mat-select formControlName="team">
+            <mat-option value="All teams">All teams</mat-option>
+            <mat-option [value]="match.homeTeam">{{ match.homeTeam.name }}</mat-option>
+            <mat-option [value]="match.awayTeam">{{ match.awayTeam.name }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>Time unit</mat-label>
+          <input matInput type="number" formControlName="timeUnit" step="1" min="1">
+        </mat-form-field>
+
+        <label>
+          <mat-checkbox formControlName="accumulateCheckBox">Use accumulative calculation</mat-checkbox>
+        </label>
+      </div>
+    </div>
+
+    <div class="item-list-container">
+      <ng-container *ngIf="matchTeamStatistic$ | async as matchTeamStatistic; else noStatistic">
+        <div class="team-statistic-container" *ngFor="let teamStatistic of matchTeamStatistic;">
+          <p class="head-type">{{ teamStatistic.name | uppercase }}</p>
+          <div class="table-headers statistic-table-template">
+            <p class="table-header">PLAYER</p>
+            <p class="table-header">TIME</p>
+            <p class="table-header">POINTS</p>
+            <p class="table-header">FT</p>
+            <p class="table-header">2FG</p>
+            <p class="table-header">3FG</p>
+            <p class="table-header">ASSISTS</p>
+            <p class="table-header">OFFENSIVE REBOUNDS</p>
+            <p class="table-header">DEFENSIVE REBOUNDS</p>
+            <p class="table-header">STEALS</p>
+            <p class="table-header">BLOCKS</p>
+            <p class="table-header">TURNOVERS</p>
+          </div>
+          <div class="item-container statistic-table-template" *ngFor="let statistic of teamStatistic.statistics;">
+            <div class="player-full-name">{{ statistic.fullName }}</div>
+            <div class="player-time">{{ statistic.courtTime }}</div>
+            <div class="player-points">{{ statistic.points }}</div>
+            <div class="player-ft">{{ statistic.onePointShotHit }}
+              / {{ statistic.onePointShotHit + statistic.onePointShotMiss }}
+            </div>
+            <div class="player-2fg">{{ statistic.twoPointShotHit }}
+              / {{ statistic.twoPointShotHit + statistic.twoPointShotMiss }}
+            </div>
+            <div class="player-3fg">{{ statistic.threePointShotHit }}
+              / {{ statistic.threePointShotHit + statistic.threePointShotMiss }}
+            </div>
+            <div class="player-assists">{{ statistic.assists }}</div>
+            <div class="player-offensive-rebounds">{{ statistic.offensiveRebounds }}</div>
+            <div class="player-defensive-rebounds">{{ statistic.defensiveRebounds }}</div>
+            <div class="player-steals">{{ statistic.steals }}</div>
+            <div class="player-blocks">{{ statistic.blocks }}</div>
+            <div class="player-turnovers">{{ statistic.turnovers }}</div>
+          </div>
+          <div class="chart-container" *ngIf="hasTeamId">
+            <div class="chart-area">
+              <p class="page-head"> Players Impact</p>
+              <div class="select-container">
+                <mat-form-field appearance="fill">
+                  <mat-label>Statistical Share</mat-label>
+                  <mat-select formControlName="statisticalShare">
+                    <mat-option *ngFor="let share of statisticalShares" [value]="share.key">
+                      {{ share.display }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+              <canvas baseChart
+                      class="impact-chart-canvas"
+                      [data]="pieChartData"
+                      [options]="pieChartOptions"
+                      [type]="'pie'"
+                      #impactChart>
+              </canvas>
+            </div>
+          </div>
+        </div>
+        <div class="chart-container" *ngIf="!hasTeamId && barChartData.datasets.length">
+          <div class="chart-area">
+            <p class="page-head"> Total teams box score comparison </p>
+            <canvas baseChart
+                    class="total-chart-canvas"
+                    [data]="barChartData"
+                    [plugins]="matchStatisticChartPlugins"
+                    [options]="barChartOptions"
+                    [type]="'bar'"
+                    #totalChart>
+            </canvas>
+          </div>
+        </div>
+      </ng-container>
+      <ng-template #noStatistic><p class="main-text white"> There are not provided statistic for that match with current
+        filters configuration</p></ng-template>
+    </div>
+  </form>
+</div>

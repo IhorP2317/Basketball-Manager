@@ -146,6 +146,11 @@ body {
   grid-template-columns: 360px 360px 180px 180px 180px 180px 180px 180px;
 }
 
+.statistic-table-template {
+  grid-template-columns: 150px 150px 150px 200px 200px 200px 150px 150px 150px 150px 150px 150px;
+}
+
+
 .match-table-template {
   grid-template-columns: 360px 360px 180px 180px 180px 180px 180px;
 }
@@ -299,3 +304,236 @@ body {
   font-size: 24px;
   gap: 8px;
 }
+
+.awards-list-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  .no-awards-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    width: 100%;
+    position: relative;
+    padding: 20px;
+  }
+
+  .award-app-filters {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+    width: 100%;
+    position: relative;
+
+    .add-button-container {
+      display: flex;
+      justify-content: center;
+      width: 50px;
+      height: 50px;
+      position: absolute;
+      top: 0;
+      left: 90%;
+
+      .add-button {
+        width: 100%;
+        height: 100%;
+
+        .mat-mdc-button-touch-target {
+          font-size: 18px;
+        }
+
+        .mat-icon {
+          position: relative;
+          text-align: center;
+          line-height: 36px;
+          font-size: 36px;
+          width: 40px;
+          height: 40px;
+        }
+      }
+    }
+  }
+
+  .award-list {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 1200px;
+    margin: 20px auto;
+    justify-content: center;
+    gap: 30px;
+    position: relative;
+
+
+  }
+
+  .award-item-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    .award-logo {
+      width: 150px;
+      height: 150px;
+      margin-bottom: 10px;
+    }
+
+    .award-name {
+      font-size: 18px;
+      font-weight: bold;
+      text-align: center;
+      padding: 0 10px;;
+      word-wrap: break-word;
+    }
+  }
+
+
+}
+
+.experiences-list-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  .no-experience-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    width: 100%;
+    position: relative;
+    padding: 20px;
+  }
+
+  .experience-app-filters {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+    width: 100%;
+    position: relative;
+
+    .add-button-container {
+      display: flex;
+      justify-content: center;
+      width: 50px;
+      height: 50px;
+      position: absolute;
+      top: 0;
+      left: 90%;
+
+      .add-button {
+        width: 100%;
+        height: 100%;
+
+        .mat-mdc-button-touch-target {
+          font-size: 18px;
+        }
+
+        .mat-icon {
+          position: relative; // Relative positioning with respect to the button
+          text-align: center;
+          line-height: 36px;
+          font-size: 36px;
+          width: 40px;
+          height: 40px;
+        }
+      }
+    }
+  }
+
+  .experience-list {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 1200px;
+    margin: 20px auto;
+    justify-content: center;
+    gap: 30px;
+    position: relative;
+
+
+  }
+
+  .team-item-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    .team-logo {
+      width: 150px;
+      height: 150px;
+    }
+
+    .team-name {
+      font-size: 18px;
+      font-weight: bold;
+      text-align: center;
+      padding: 0 10px;;
+      word-wrap: break-word;
+    }
+  }
+
+
+}
+
+.experience-card {
+  max-width: 800px;
+  margin: 0 auto;
+  border-radius: 4px;
+  text-align: center;
+  padding-top: 20px;
+
+  .experience-card-content {
+
+
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+
+    max-height: calc(100vh - 120px);
+    overflow-y: auto;
+
+
+    .experience-actions {
+      margin-top: 15px;
+    }
+
+    .button-action-container {
+      display: flex;
+      justify-content: center;
+    }
+
+    .experience-form {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      align-items: center;
+      justify-content: center;
+      padding-bottom: 10px;
+    }
+
+
+  }
+
+  mat-error {
+    font-size: 0.8rem;
+    color: #f44336;
+  }
+
+
+  mat-hint {
+    font-size: 0.8rem;
+  }
+}
+
+

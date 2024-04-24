@@ -10,6 +10,7 @@ import { CurrentUserService } from '../../../../shared/services/current-user.ser
 export class UserItemComponent {
   @Input() public user?: User | null;
   @Output() deleteRequest = new EventEmitter<User>();
+  @Output() updateRequest = new EventEmitter<User>();
 
   constructor(private currentUserService: CurrentUserService) {}
 
@@ -23,6 +24,10 @@ export class UserItemComponent {
 
   OnDeleteClicked() {
     this.deleteRequest.emit(this.user!);
+  }
+
+  onUpdateClicked() {
+    this.updateRequest.emit(this.user!);
   }
 
   onError(event: Event) {

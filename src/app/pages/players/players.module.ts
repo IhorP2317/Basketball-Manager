@@ -18,24 +18,16 @@ import { HttpClientModule } from '@angular/common/http';
 import { MatSelectCountryModule } from '@angular-material-extensions/select-country';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { PlayerTeamNamePipe } from './pipes/player-team-name.pipe';
-import { DataManagerCreateAndEditPlayerComponent } from './components/data-manager-create-and-edit-player/data-manager-create-and-edit-player.component';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatCard, MatCardContent } from '@angular/material/card';
 import { MatNativeDateModule } from '@angular/material/core';
 
 @NgModule({
-  declarations: [
-    PlayersComponent,
-    PlayerItemComponent,
-    PlayerTeamNamePipe,
-    DataManagerCreateAndEditPlayerComponent,
-  ],
+  declarations: [PlayersComponent, PlayerItemComponent, PlayerTeamNamePipe],
   imports: [
     CommonModule,
     RouterModule.forChild([{ path: '', component: PlayersComponent }]),
     MatSelectModule,
-    MatFormFieldModule,
-    MatInputModule,
     MatIcon,
     MatIconButton,
     MatTooltip,
@@ -50,6 +42,8 @@ import { MatNativeDateModule } from '@angular/material/core';
     MatNativeDateModule,
     MatCardContent,
     MatCard,
+    MatFormFieldModule,
+    MatInputModule,
   ],
   exports: [],
 })

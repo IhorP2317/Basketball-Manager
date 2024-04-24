@@ -1,0 +1,139 @@
+
+.add-button-container {
+  display: flex;
+  justify-content: flex-end;
+  top: 0;
+  width: 50px;
+  height: 50px;
+  position: absolute;
+  left: calc(100% - 50px);
+
+  span {
+    width: 50px;
+    height: 50px;
+  }
+
+  .add-button {
+    width: 100%;
+    height: 100%;
+
+    .mat-mdc-button-touch-target {
+      font-size: 18px;
+    }
+
+    .mat-icon {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      line-height: 36px;
+      font-size: 36px;
+      width: 40px;
+      height: 40px;
+    }
+  }
+}
+
+.item-list-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  align-items: center;
+  background: linear-gradient(to bottom, #333333, #999999);
+  padding: 10px 0;
+  border-radius: 4px;
+}
+
+.item-container {
+  display: grid;
+  align-items: center;
+  text-align: center;
+  border-radius: 4px;
+  padding: 10px 0;
+  background-color: white;
+  border-bottom: 1px solid #ccc;
+}
+
+
+.coach-card {
+  max-width: 800px;
+  margin: 0 auto;
+  border-radius: 4px;
+  text-align: center;
+  padding-top: 20px;
+
+  .coach-card-content {
+    .image-container {
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+
+    max-height: calc(100vh - 120px);
+    overflow-y: auto;
+
+    .country-measurements-group {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 20px;
+    }
+
+    .jersey-number-add-experience-group {
+      position: relative;
+      display: grid;
+      grid-template-columns: 1fr 50px;
+      gap: 10px;
+
+    }
+
+    .experience-actions {
+      margin-top: 15px;
+    }
+
+    .button-action-container {
+      display: flex;
+      justify-content: center;
+    }
+
+    .add-button, .delete-button {
+      justify-self: center; /* Centers the button in its grid cell */
+    }
+
+    /* If you want to make sure the delete button is always to the right */
+    .delete-button {
+      justify-self: end;
+    }
+  }
+}
+
+.experience-form-row {
+  display: grid;
+  grid-template-columns: auto auto auto auto; /* Change to two columns unless you have a third element */
+  gap: 20px; /* Sets a 20px gap between grid items */
+  align-items: center;
+  justify-content: space-between; /* This may spread out items too much if the container width is large */
+  padding-bottom: 20px; /* Adds space below each row for better visual separation */
+}
+
+
+mat-select-country.full-width {
+  width: 100% !important;
+}
+
+
+/* Error message styles */
+mat-error {
+  font-size: 0.8rem; /* Adjust font size as needed */
+  color: #f44336; /* Adjust color as needed */
+}
+
+/* Hint text styles */
+mat-hint {
+  font-size: 0.8rem; /* Adjust font size as needed */
+}

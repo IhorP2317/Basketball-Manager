@@ -11,8 +11,13 @@ export class MatchesListComponent {
   @Input() matches: Match[] = [];
   @Input() isAdmin: boolean = false;
   @Output() deleteMatch = new EventEmitter<string>();
+  @Output() updateMatch = new EventEmitter<Match>();
 
   onDeleteRequested(matchId: string) {
     this.deleteMatch.emit(matchId);
+  }
+
+  onUpdateRequested(match: Match) {
+    this.updateMatch.emit(match);
   }
 }

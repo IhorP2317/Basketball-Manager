@@ -11,7 +11,8 @@
   <div class="user-creation-time">{{ user?.createdTime | date: 'dd/MM/yyyy HH:mm:ss' }}</div>
   <div class="user-modification-time">{{ user | userModificationTime }}</div>
   <div class="item-operations">
-    <button mat-icon-button aria-label="Edit user" class="edit-button" *ngIf="isUserCanEdit()" matTooltip="Edit user">
+    <button mat-icon-button aria-label="Edit user" class="edit-button" *ngIf="isUserCanEdit()"
+            (click)="onUpdateClicked()" matTooltip="Edit user">
       <mat-icon>edit</mat-icon>
     </button>
     <button mat-icon-button aria-label="Delete user" class="delete-button" *ngIf="isUserCanRemove()"

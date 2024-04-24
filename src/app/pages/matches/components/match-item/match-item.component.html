@@ -1,4 +1,5 @@
 <div class="item-container" [ngClass]="{'match-table-template': !isAdmin, 'match-table-template-admin': isAdmin}">
+
   <div class="match-time">
     <span class="match-date">{{ match | matchTime }}</span>
   </div>
@@ -33,19 +34,23 @@
     >
       Show tickets
     </button>
-    <button
-      *ngIf="match?.status === 'Completed'"
-      mat-raised-button
-      class="button-primary"
-    >
-      Show statistics
-    </button>
+    <a [routerLink]="match?.id">
+      <button
+        *ngIf="match?.status === 'Completed'"
+        mat-raised-button
+        class="button-primary"
+        (click)="printStatisticRoute()"
+      >
+        Show statistics
+      </button>
+    </a>
   </div>
   <div class="item-operations" *ngIf="isAdmin">
     <button
       mat-icon-button
       aria-label="Edit match"
       class="edit-button"
+      (click)="onUpdateClicked()"
       matTooltip="Edit Match"
     >
       <mat-icon>edit</mat-icon>

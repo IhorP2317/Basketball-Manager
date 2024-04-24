@@ -1,0 +1,49 @@
+<div class="experiences-list-container">
+
+  <div class="no-experience-container">
+    <div class="experience-app-filters">
+      <div class="add-button-container">
+        <button
+          mat-icon-button
+          aria-label="Create new experience"
+          class="add-button"
+          (click)="onCreateClicked()"
+          matTooltip="Create new experience"
+          *ngIf="isAdmin"
+        >
+          <mat-icon>add_circle_outline</mat-icon>
+        </button>
+      </div>
+    </div>
+    <ng-container
+      *ngIf="playerExperiences.length > 0; else noExperiencesTemplate"
+    >
+      <div class="experience-list">
+        <div *ngFor="let experience of playerExperiences">
+          <div class="team-item-container">
+            <img [src]="experience!.teamId | teamImageSrc" (error)="onError($event)" class="team-logo"
+                 alt="{{experience.teamName}}">
+            <p class="team-name">{{ experience.teamName }}</p>
+            <p class="experience-time">{{ experience | experienceTime }}</p>
+            <div class="item-operations" *ngIf="isAdmin">
+              <button mat-icon-button aria-label="Edit experience" (click)="onUpdateClicked(experience)"
+                      class="edit-button"
+                      matTooltip="Edit experience">
+                <mat-icon>edit</mat-icon>
+              </button>
+              <button mat-icon-button aria-label="Delete experience" class="delete-button"
+                      (click)="onDeleteClicked(experience.id)"
+                      matTooltip="Delete experience">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </ng-container>
+    <ng-template #noExperiencesTemplate>
+      <P CLASS="main-text dark">EXPERIENCES NOT FOUND</P>
+    </ng-template>
+  </div>
+</div>

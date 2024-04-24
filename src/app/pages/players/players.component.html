@@ -99,15 +99,17 @@
     <P class="main-text white">PLAYERS NOT FOUND</P>
   </ng-template>
 </div>
-<datamanager-pop-up #createDialog>
-  <app-data-manager-create-and-edit-player [form]="playerActionsForm"
-                                           action="Create"
-                                           (close)="createDialog.close()"
-                                           *datamanagerPopUpContent></app-data-manager-create-and-edit-player>
-</datamanager-pop-up>
-<datamanager-pop-up #editDialog>
-  <app-data-manager-create-and-edit-player [form]="playerActionsForm"
-                                           action="Edit"
-                                           (closed)="editDialog.close()"
-                                           *datamanagerPopUpContent></app-data-manager-create-and-edit-player>
-</datamanager-pop-up>
+<app-pop-up #createDialog>
+  <app-create-and-edit-player [form]="playerActionsForm"
+                              action="Create"
+                              (createRequested)="handleCreatePlayer($event)"
+                              (closed)="createDialog.close()"
+                              *popUpContent></app-create-and-edit-player>
+</app-pop-up>
+<app-pop-up #editDialog>
+  <app-create-and-edit-player [form]="playerActionsForm"
+                              action="Edit"
+                              (updateRequested)="handleUpdatePlayer($event)"
+                              (closed)="editDialog.close()"
+                              *popUpContent></app-create-and-edit-player>
+</app-pop-up>

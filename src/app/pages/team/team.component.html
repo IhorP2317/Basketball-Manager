@@ -7,11 +7,11 @@
     <div class="list-head">
       <p class="head-type">PLAYERS</p>
       <div class="add-button-container" *ngIf="isAdminUser()">
-        <button
-          mat-icon-button
-          aria-label="Create a new player"
-          class="add-button"
-          matTooltip="Create a new player"
+        <button (click)="fillCreatePlayerForm();createPlayerDialog.open()"
+                mat-icon-button
+                aria-label="Create a new player"
+                class="add-button"
+                matTooltip="Create a new player"
         >
           <mat-icon>add_circle_outline</mat-icon>
         </button>
@@ -19,30 +19,66 @@
     </div>
 
 
-    <div class="staff-list">
+    <div class="staff-list" *ngIf="team.players.length > 0; else noPlayerMessage">
       <app-team-player-item *ngFor="let player of team.players" [player]="player"
-                            [isAdmin]="isAdminUser()"></app-team-player-item>
+                            [isAdmin]="isAdminUser()" (deleteRequest)="onDeletePlayerClicked($event)"
+                            (updateRequest)="fillUpdatePlayerForm($event); editPlayerDialog.open()"></app-team-player-item>
     </div>
+    <ng-template #noPlayerMessage>
+      <P class="head-type with-margin">{{ team.name.toUpperCase() }} HAS NO ANY PLAYERS </P>
+    </ng-template>
     <div class="list-head">
       <p class="head-type">Coaches</p>
       <div class="add-button-container" *ngIf="isAdminUser()">
-        <button
-          mat-icon-button
-          aria-label="Create a new coach"
-          class="add-button"
-          matTooltip="Create a new coach"
+        <button (click)="fillCreateCoachForm();createCoachDialog.open()"
+                mat-icon-button
+                aria-label="Create a new coach"
+                class="add-button"
+                matTooltip="Create a new coach"
         >
           <mat-icon>add_circle_outline</mat-icon>
         </button>
       </div>
     </div>
 
-    <div class="staff-list">
-      <app-team-coach-item *ngFor="let coach of team.coaches" [coach]="coach"
+    <div class="staff-list" *ngIf="team.coaches.length > 0; else noCoachMessage">
+      <app-team-coach-item *ngFor="let coach of team.coaches" (deleteRequest)="onDeleteCoachClicked($event)"
+                           (updateRequest)="fillUpdateCoachForm($event); editCoachDialog.open()" [coach]="coach"
                            [isAdmin]="isAdminUser()"></app-team-coach-item>
     </div>
+    <ng-template #noCoachMessage>
+      <P class="head-type with-margin">{{ team.name.toUpperCase() }} HAS NO ANY COACHES </P>
+    </ng-template>
   </div>
-  Coach
 </div>
+<app-pop-up #createPlayerDialog>
+  <app-create-and-edit-player [form]="playerActionsForm"
+                              action="Create"
+                              (createRequested)="handleCreatePlayer($event)"
+                              (closed)="createPlayerDialog.close()"
+                              *popUpContent></app-create-and-edit-player>
+</app-pop-up>
+<app-pop-up #editPlayerDialog>
+  <app-create-and-edit-player [form]="playerActionsForm"
+                              action="Edit"
+                              (updateRequested)="handleUpdatePlayer($event)"
+                              (closed)="editPlayerDialog.close()"
+                              *popUpContent></app-create-and-edit-player>
+</app-pop-up>
 
+
+<app-pop-up #createCoachDialog>
+  <app-create-and-edit-coach [form]="coachActionsForm"
+                             action="Create"
+                             (createRequested)="handleCreateCoach($event)"
+                             (closed)="createCoachDialog.close()"
+                             *popUpContent></app-create-and-edit-coach>
+</app-pop-up>
+<app-pop-up #editCoachDialog>
+  <app-create-and-edit-coach [form]="coachActionsForm"
+                             action="Edit"
+                             (updateRequested)="handleUpdateCoach($event)"
+                             (closed)="editCoachDialog.close()"
+                             *popUpContent></app-create-and-edit-coach>
+</app-pop-up>
 

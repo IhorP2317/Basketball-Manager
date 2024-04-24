@@ -1,0 +1,60 @@
+<mat-card class="experience-card">
+  <h1>{{ action }} Experience</h1>
+  <mat-card-content class="experience-card-content">
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+      <div class="experience-form">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Experience Date Range</mat-label>
+          <mat-date-range-input [rangePicker]="picker">
+            <input matStartDate formControlName="startDate" [min]="minExperienceDate" [max]="maxExperienceDate"
+                   placeholder="Start date">
+            <input matEndDate formControlName="endDate" [min]="minExperienceDate" [max]="maxExperienceDate"
+                   placeholder="End date">
+          </mat-date-range-input>
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-date-range-picker #picker></mat-date-range-picker>
+          <mat-error *ngIf="form.controls.startDate.dirty || form.controls.startDate.touched">
+                  <span
+                    *ngIf="form.controls.startDate.hasError('required')">Start Date is <strong>required</strong></span>
+            <span *ngIf="form.controls.startDate.hasError('min')">Start date cannot be before minimum date</span>
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="outline" *ngIf="action === 'Create'" class="full-width">
+          <mat-label>Team</mat-label>
+          <mat-select formControlName="team">
+            <mat-option *ngFor="let team of selectTeams$ | async" [value]="team">{{ team.name }}</mat-option>
+          </mat-select>
+          <mat-error *ngIf=" form.controls.team.dirty ||  form.controls.team.touched">
+                  <span
+                    *ngIf=" form.controls.team.hasError('required')">Team is <strong>required</strong></span>
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="outline" *ngIf="action === 'Create'" class="full-width">
+          <mat-label>Status</mat-label>
+          <mat-select formControlName="status">
+            <mat-option *ngFor="let status of statuses" [value]="status.value">{{ status.value }}
+            </mat-option>
+          </mat-select>
+          <mat-error
+            *ngIf="
+                form.controls.status.dirty ||  form.controls.status.touched
+                  "
+          >
+                  <span *ngIf=" form.controls.status.hasError('required')"
+                  >Status is <strong>required</strong></span
+                  >
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="button-action-container">
+        <button
+          class="button-primary full-width"
+          mat-raised-button
+          type="submit"
+        >
+          {{ action }}
+        </button>
+      </div>
+    </form>
+  </mat-card-content>
+</mat-card>

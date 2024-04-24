@@ -31,6 +31,7 @@
       <button
         mat-icon-button
         aria-label="Create a new user"
+        (click)="fillCreateUserForm(); createUserDialog.open()"
         class="add-button"
         matTooltip="Create a new user"
       >
@@ -74,7 +75,8 @@
       <p class="table-header"></p>
     </div>
     <app-user-item *ngFor="let user of pagedUserList.items" [user]="user"
-                   (deleteRequest)="onDeleteUserClicked($event)"></app-user-item>
+                   (deleteRequest)="onDeleteUserClicked($event)"
+                   (updateRequest)="fillUpdateUserForm($event); editUserDialog.open()"></app-user-item>
     <app-paginator
       *ngIf="pagedUserList.items.length > 0"
       [isDarkBackground]="true"
@@ -88,4 +90,18 @@
   </ng-template>
 </div>
 
+<app-pop-up #createUserDialog>
+  <app-create-and-edit-user [form]="userActionsForm"
+                            action="Create"
+                            (createRequested)="handleCreateUser($event)"
+                            (closed)="createUserDialog.close()"
+                            *popUpContent></app-create-and-edit-user>
+</app-pop-up>
+<app-pop-up #editUserDialog>
+  <app-create-and-edit-user [form]="userActionsForm"
+                            action="Edit"
+                            (updateRequested)="handleUpdateUser($event)"
+                            (closed)="editUserDialog.close()"
+                            *popUpContent></app-create-and-edit-user>
+</app-pop-up>
 

@@ -1,0 +1,42 @@
+.user-card {
+  max-width: 800px;
+  margin: 0 auto;
+  border-radius: 4px;
+  text-align: center;
+  padding-top: 20px;
+
+  .user-card-content {
+    .image-container {
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+
+    max-height: calc(100vh - 120px);
+    overflow-y: auto;
+
+
+    .button-action-container {
+      display: flex;
+      justify-content: center;
+    }
+
+
+  }
+}
+
+
+mat-error {
+  font-size: 0.8rem; /* Adjust font size as needed */
+  color: #f44336; /* Adjust color as needed */
+}
+
+/* Hint text styles */
+mat-hint {
+  font-size: 0.8rem;
+}

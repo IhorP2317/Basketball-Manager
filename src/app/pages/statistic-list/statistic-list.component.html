@@ -1,0 +1,118 @@
+<div class="match-statistic-container" *ngIf="match">
+  <h1 class="page-head">MATCH STATISTIC</h1>
+
+
+  <div class="app-filters">
+    <form [formGroup]="statisticFiltersForm">
+      <div class="select-filters">
+        <mat-form-field appearance="fill">
+          <mat-label>Choose a team</mat-label>
+          <mat-select formControlName="team">
+            <mat-option value="All teams">All teams</mat-option>
+            <mat-option [value]="match.homeTeam">{{ match.homeTeam.name }}</mat-option>
+            <mat-option [value]="match.awayTeam">{{ match.awayTeam.name }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>Time unit</mat-label>
+          <input matInput type="number" formControlName="timeUnit" step="1" min="1">
+        </mat-form-field>
+      </div>
+      <div class="add-button-container">
+        <button
+          mat-icon-button
+          aria-label="Create new statistic"
+          class="add-button"
+          (click)="fillCreateStatisticForm(); dialogOpen('Create')"
+          matTooltip="Create new statistic"
+        >
+          <mat-icon>add_circle_outline</mat-icon>
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <div class="item-list-container">
+    <ng-container *ngIf="statistics$ | async as matchStatistic; else noStatistic">
+      <div class="match-statistic-container">
+        <div class="table-headers statistic-template">
+          <p class="table-header">PLAYER</p>
+          <p class="table-header">TEAM</p>
+          <p class="table-header">TIME UNIT</p>
+          <p class="table-header">TIME ON COURT</p>
+          <p class="table-header">FT MAKE</p>
+          <p class="table-header">FT MISS</p>
+          <p class="table-header">2FG MAKE</p>
+          <p class="table-header">2FG MISS</p>
+          <p class="table-header">3FG MAKE</p>
+          <p class="table-header">3FG MISS</p>
+          <p class="table-header">ASSISTS</p>
+          <p class="table-header">OFFENSIVE REBOUNDS</p>
+          <p class="table-header">DEFENSIVE REBOUNDS</p>
+          <p class="table-header">STEALS</p>
+          <p class="table-header">BLOCKS</p>
+          <p class="table-header">TURNOVERS</p>
+        </div>
+        <div class="item-container statistic-template" *ngFor="let statistic of matchStatistic.items;">
+          <div class="player-full-name">{{ statistic.playerExperience.fullName }}</div>
+          <div class="team-name">{{ statistic.playerExperience.teamName }}</div>
+          <div class="time-unit">{{ statistic.timeUnit }}</div>
+          <div class="player-time">{{ statistic.courtTime }}</div>
+          <div class="player-ft">{{ statistic.onePointShotHitCount }}</div>
+          <div class="player-ft">{{ statistic.onePointShotMissCount }}</div>
+          <div class="player-2fg">{{ statistic.twoPointShotHitCount }}</div>
+          <div class="player-2fg">{{ statistic.twoPointShotMissCount }}</div>
+          <div class="player-3fg">{{ statistic.threePointShotHitCount }}
+          </div>
+          <div class="player-3fg">{{ statistic.threePointShotMissCount }}
+          </div>
+          <div class="player-assists">{{ statistic.assistCount }}</div>
+          <div class="player-offensive-rebounds">{{ statistic.offensiveReboundCount }}</div>
+          <div class="player-defensive-rebounds">{{ statistic.defensiveReboundCount }}</div>
+          <div class="player-steals">{{ statistic.stealCount }}</div>
+          <div class="player-blocks">{{ statistic.blockCount }}</div>
+          <div class="player-turnovers">{{ statistic.turnoverCount }}</div>
+          <div class="item-operations">
+            <button mat-icon-button aria-label="Edit statistic" class="edit-button"
+                    (click)="dialogOpen('Edit', statistic)"
+                    matTooltip="Edit statistic">
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button mat-icon-button aria-label="Delete statistic" class="delete-button"
+                    (click)="onDeleteStatisticClicked(statistic)"
+                    matTooltip="Delete statistic">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div>
+        </div>
+      </div>
+      <app-paginator
+        class="statistic-paginator"
+        *ngIf="matchStatistic.items.length >= 1"
+        [isDarkBackground]="false"
+        [length]="matchStatistic.totalCount"
+        [pageIndex]="matchStatistic.page - 1"
+        [pageSize]="matchStatistic.pageSize"
+        (pageChangedEvent)="onPageChangedEvent($event)"
+      />
+    </ng-container>
+    <ng-template #noStatistic><p class="main-text white"> There are not provided statistic for that match with current
+      filters configuration</p></ng-template>
+  </div>
+</div>
+<app-pop-up #createStatisticDialog>
+  <app-create-and-edit-statistic [form]="statisticActionsForm"
+                                 [playerExperiences]="matchPlayerExperiences"
+                                 action="Create"
+                                 (createRequested)="handleCreateStatistic($event)"
+                                 (closed)="createStatisticDialog.close()"
+                                 *popUpContent></app-create-and-edit-statistic>
+</app-pop-up>
+<app-pop-up #editStatisticDialog>
+  <app-create-and-edit-statistic [form]="statisticActionsForm"
+                                 [playerExperiences]="matchPlayerExperiences"
+                                 action="Edit"
+                                 (updateRequested)="handleUpdateStatistic($event)"
+                                 (closed)="editStatisticDialog.close()"
+                                 *popUpContent></app-create-and-edit-statistic>
+</app-pop-up>

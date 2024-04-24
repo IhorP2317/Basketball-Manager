@@ -13,6 +13,7 @@
       </mat-form-field>
       <div class="add-button-container" *ngIf="isAdminUser()">
         <button
+          (click)="fillCreateTeamForm();createTeamDialog.open();"
           mat-icon-button
           aria-label="Create new team"
           class="add-button"
@@ -30,7 +31,8 @@
       <div class="teams-list">
         <div *ngFor="let team of teamsPagedList.items">
           <app-team-item [team]="team" [isAdmin]="isAdminUser()"
-                         (deleteRequest)="onDeleteTeamClicked($event)"></app-team-item>
+                         (deleteRequest)="onDeleteTeamClicked($event)"
+                         (updateRequest)="fillUpdateTeamForm($event);editTeamDialog.open()"></app-team-item>
         </div>
       </div>
       <app-paginator
@@ -48,3 +50,17 @@
     </ng-template>
   </div>
 </div>
+<app-pop-up #createTeamDialog>
+  <app-create-and-edit-team [form]="teamActionsForm"
+                            action="Create"
+                            (createRequested)="handleCreateTeam($event)"
+                            (closed)="createTeamDialog.close()"
+                            *popUpContent></app-create-and-edit-team>
+</app-pop-up>
+<app-pop-up #editTeamDialog>
+  <app-create-and-edit-team [form]="teamActionsForm"
+                            action="Edit"
+                            (updateRequested)="handleUpdateTeam($event)"
+                            (closed)="editTeamDialog.close()"
+                            *popUpContent></app-create-and-edit-team>
+</app-pop-up>

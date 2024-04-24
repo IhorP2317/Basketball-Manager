@@ -10,11 +10,16 @@ export class TeamItemComponent {
   @Input() team?: Team | null;
   @Input() isAdmin: boolean = false;
   @Output() deleteRequest = new EventEmitter<Team>();
+  @Output() updateRequest = new EventEmitter<Team>();
 
   constructor(@Inject('apiUrl') private baseUrl: string) {}
 
   onDeleteClicked() {
     this.deleteRequest.emit(this.team!);
+  }
+
+  onUpdateClicked() {
+    this.updateRequest.emit(this.team!);
   }
 
   getImageSrc(teamId: string): string {

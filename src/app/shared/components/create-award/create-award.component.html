@@ -1,0 +1,84 @@
+<mat-card class="award-card">
+  <h1>Create Award</h1>
+  <mat-card-content class="award-card-content">
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+      <div class="award-form">
+        <div class="image-container">
+          <app-avatar (handleFileChange)="handleImageFile($event)" [formControl]="form.controls.avatar"></app-avatar>
+        </div>
+        <div class="award-row">
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Experience</mat-label>
+            <mat-select [formControl]="form.controls.staffExperience">
+              <mat-option *ngFor="let experience of experiences" [value]="experience">
+                {{ experience.teamName + ' (' + experience.startDate + ')' }}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf=" form.controls.staffExperience.dirty ||  form.controls.staffExperience.touched">
+                  <span
+                    *ngIf=" form.controls.staffExperience.hasError('required')">Experience is <strong>required</strong></span>
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field class="full-width" appearance="outline">
+            <mat-label>Date</mat-label>
+            <input matInput [matDatepicker]="picker" [max]="maxExperienceDate" [min]="minExperienceDate"
+                   placeholder="MM/DD/YYYY" readonly
+                   [formControl]="form.controls.date">
+            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+            <mat-error
+              *ngIf="
+                    form.controls.date?.dirty || form.controls.date?.touched
+                  "
+            >
+                  <span *ngIf="form.controls.date.hasError('required')"
+                  >Date is <strong>required</strong></span>
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <mat-error
+          *ngIf=" (form.controls.staffExperience.dirty ||  form.controls.staffExperience.touched) &&  (form.controls.date.dirty ||  form.controls.date.touched)">
+            <span
+              *ngIf="form.hasError('dateOutsideExperienceRange')">Date must be within the staff experience period.</span>
+        </mat-error>
+        <div class="award-row full-width">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Name</mat-label>
+            <input
+              matInput
+              placeholder="Award's name"
+              type="text"
+              [formControl]="form.controls.name"
+            />
+
+            <mat-error
+              *ngIf="
+              form.controls.name?.dirty || form.controls.name?.touched
+            "
+            >
+            <span *ngIf="form.controls.name?.hasError('required')"
+            >Award name is <strong>required</strong></span
+            >
+              <span *ngIf="form.controls.name?.hasError('pattern')"
+              >Please enter a valid team name</span
+              >
+            </mat-error>
+          </mat-form-field>
+          <label>
+            <mat-checkbox [formControl]="form.controls.isIndividualAward">Individual award</mat-checkbox>
+          </label>
+        </div>
+      </div>
+      <div class="button-action-container">
+        <button
+          class="button-primary full-width"
+          mat-raised-button
+          type="submit"
+        >
+          Create
+        </button>
+      </div>
+    </form>
+  </mat-card-content>
+</mat-card>

@@ -4,12 +4,6 @@ import { adminGuard } from './core/guards/admin.guard';
 
 const routes: Routes = [
   {
-    path: '',
-    loadChildren: () =>
-      import('./pages/matches/matches.module').then((m) => m.MatchesModule),
-    data: { showNav: true, showUserContent: true },
-  },
-  {
     path: 'login',
     loadChildren: () =>
       import('./pages/login/login.module').then((l) => l.LoginModule),
@@ -52,6 +46,23 @@ const routes: Routes = [
     data: { showNav: true, showUserContent: true },
   },
   {
+    path: 'matches/:id',
+    loadChildren: () =>
+      import('./pages/match-statistic/match-statistic.module').then(
+        (m) => m.MatchStatisticModule,
+      ),
+    data: { showNav: true, showUserContent: true },
+  },
+  {
+    path: 'matches/:id/statistic',
+    canActivate: [adminGuard],
+    loadChildren: () =>
+      import('./pages/statistic-list/statistic-list.module').then(
+        (s) => s.StatisticListModule,
+      ),
+    data: { showNav: true, showUserContent: true },
+  },
+  {
     path: 'teams',
     loadChildren: () =>
       import('./pages/teams/teams.module').then((t) => t.TeamsModule),
@@ -64,9 +75,21 @@ const routes: Routes = [
     data: { showNav: true, showUserContent: true },
   },
   {
+    path: 'coaches/:id',
+    loadChildren: () =>
+      import('./pages/coach/coach.module').then((c) => c.CoachModule),
+    data: { showNav: true, showUserContent: true },
+  },
+  {
     path: 'players',
     loadChildren: () =>
       import('./pages/players/players.module').then((p) => p.PlayersModule),
+    data: { showNav: true, showUserContent: true },
+  },
+  {
+    path: 'players/:id',
+    loadChildren: () =>
+      import('./pages/player/player.module').then((p) => p.PlayerModule),
     data: { showNav: true, showUserContent: true },
   },
   {
@@ -91,6 +114,11 @@ const routes: Routes = [
         (n) => n.NotFoundModule,
       ),
     data: { showNav: false, showUserContent: false },
+  },
+  {
+    path: '',
+    redirectTo: 'matches',
+    pathMatch: 'full',
   },
   { path: '**', redirectTo: 'not-found' },
 ];

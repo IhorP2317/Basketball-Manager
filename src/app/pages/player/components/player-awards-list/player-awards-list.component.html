@@ -1,0 +1,49 @@
+<div class="awards-list-container">
+
+  <div class="no-awards-container">
+    <div class="award-app-filters">
+      <div class="add-button-container">
+        <button
+          mat-icon-button
+          aria-label="Create new award"
+          class="add-button"
+          (click)="onCreateClicked()"
+          matTooltip="Create new award"
+          *ngIf="isAdmin"
+        >
+          <mat-icon>add_circle_outline</mat-icon>
+        </button>
+      </div>
+    </div>
+    <ng-container
+      *ngIf="hasAwards; else noAwardsTemplate"
+    >
+      <div class="award-list">
+        <div *ngFor="let experience of playerExperiences">
+          <div *ngFor="let award of experience.playerAwards">
+            <div class="award-item-container">
+              <img [src]="award!.id | awardImageSrc" (error)="onError($event)" class="award-logo"
+                   alt="{{award.name}}">
+              <p class="award-name">{{ award.name }}</p>
+              <p class="award-type" *ngIf="!award.isIndividualAward">Common award</p>
+              <p class="award-type" *ngIf="award.isIndividualAward">Individual award</p>
+              <p class="award-time">{{ award.date | date }}</p>
+              <div class="item-operations" *ngIf="isAdmin">
+                <button mat-icon-button aria-label="Delete award" class="delete-button"
+                        (click)="onDeleteClicked(award.id)"
+                        matTooltip="Delete award">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </ng-container>
+    <ng-template #noAwardsTemplate>
+      <P CLASS="main-text dark">AWARDS NOT FOUND</P>
+    </ng-template>
+  </div>
+</div>
+

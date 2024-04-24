@@ -1,0 +1,48 @@
+.statistic-card {
+  max-width: 600px;
+  margin: 0 auto;
+  border-radius: 4px;
+  text-align: center;
+  padding-top: 20px;
+
+  .statistic-card-content {
+
+
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+
+    max-height: calc(100vh - 120px);
+    overflow-y: auto;
+
+    .statistic-group {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .time-group {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .button-action-container {
+      display: flex;
+      justify-content: center;
+    }
+
+
+  }
+}
+
+
+mat-error {
+  font-size: 0.8rem;
+  color: #f44336;
+
+
+  mat-hint {
+    font-size: 0.8rem;
+  }
+}

@@ -5,7 +5,8 @@
       <div class="header-content-user" *ngIf="(currentUser$ | async) as currentUser; else guestLinks">
         <mat-icon svgIcon="ticket-icon" class="custom-icon"></mat-icon>
         <div class="user-profile">
-          <img class="current-user-image" [src]="currentUser!.id | currentUserImgSrc" (error)="onImageError($event)"
+          <img class="current-user-image" [src]="currentUserId$| async |  currentUserImgSrc"
+               (error)="onImageError($event)"
                alt="User profile">
           <span>{{ currentUser.firstName }} {{ currentUser.lastName }}</span>
         </div>

@@ -17,6 +17,11 @@ import { MatchEndpointService } from '../../../core/services/match.endpoint.serv
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { TeamEndpointService } from '../../../core/services/team.endpoint.service';
 import { Team } from '../../../core/interfaces/team/team.model';
+import { MatchRequestDto } from '../../../core/interfaces/match/match-request.dto';
+import { AlertService } from '../../../shared/services/alert.service';
+import { HttpErrorResponse } from '@angular/common/http';
+import { MatchUpdateDto } from '../../../core/interfaces/match/match-update.dto';
+import { ApiErrorHandler } from '../../../core/helpers/api-error-handler.helper';
 
 @UntilDestroy()
 @Injectable()
@@ -48,6 +53,7 @@ export class MatchesPageService {
   constructor(
     private matchEndpointService: MatchEndpointService,
     private teamEndpointService: TeamEndpointService,
+    private alertService: AlertService,
   ) {
     this.onFiltersAndPagingChange();
     this.loadMatchYears$().pipe(untilDestroyed(this)).subscribe();
@@ -139,6 +145,32 @@ export class MatchesPageService {
           console.error('Error deleting match:', error);
           return of(null);
         }),
+        untilDestroyed(this),
+      )
+      .subscribe();
+  }
+
+  createMatch(match: MatchRequestDto) {
+    this.matchEndpointService
+      .createMatch(match)
+      .pipe(
+        tap(() => this.refreshMatches()),
+        catchError((response: HttpErrorResponse) =>
+          ApiErrorHandler.handleError(response, this.alertService),
+        ),
+        untilDestroyed(this),
+      )
+      .subscribe();
+  }
+
+  updateMatch(matchId: string, match: MatchUpdateDto) {
+    this.matchEndpointService
+      .updateMatch(matchId, match)
+      .pipe(
+        tap(() => this.refreshMatches()),
+        catchError((response: HttpErrorResponse) =>
+          ApiErrorHandler.handleError(response, this.alertService),
+        ),
         untilDestroyed(this),
       )
       .subscribe();

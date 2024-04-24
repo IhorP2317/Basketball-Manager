@@ -1,0 +1,178 @@
+<mat-card class="match-card">
+  <h1>{{ action }} Match</h1>
+  <mat-card-content class="match-card-content">
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+
+      <p *ngIf="errorMessage != null">{{ errorMessage }}</p>
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Location</mat-label>
+        <input
+          matInput
+          placeholder="Lviv Shevchenka street 111a"
+          type="text"
+          [formControl]="form.controls.location"
+        />
+
+        <mat-error
+          *ngIf="
+              form.controls.location?.dirty || form.controls.location?.touched
+            "
+        >
+            <span *ngIf="form.controls.location?.hasError('required')"
+            >Location is <strong>required</strong></span
+            >
+        </mat-error>
+      </mat-form-field>
+      <div class="match-time-group">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Start Time</mat-label>
+          <input
+            matInput
+            placeholder="YYYY-MM-DD HH:mm:ss"
+            type="datetime-local"
+            [min]=minStartTimeDate
+            [formControl]="form.controls.startTime"
+          />
+
+          <mat-error
+            *ngIf="
+                   form.controls.startTime?.dirty ||form.controls.startTime?.touched
+                  "
+          >
+                  <span *ngIf="form.controls.startTime?.hasError('required')"
+                  >Start time is <strong>required</strong></span
+                  >
+            <span *ngIf="form.controls.startTime?.hasError('date')"
+            >Start time is too old </span
+            >
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>End Time</mat-label>
+          <input
+            matInput
+            placeholder="YYYY-MM-DD HH:mm:ss"
+            type="datetime-local"
+            [max]=maxEndTimeDate
+            [formControl]="form.controls.endTime"
+          />
+
+          <mat-error
+            *ngIf="
+                   form.controls.endTime.dirty ||form.controls.endTime.touched
+                  "
+          >
+
+            <span *ngIf="form.controls.endTime.hasError('date')"
+            >End time is too old </span
+            >
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Status</mat-label>
+          <mat-select [formControl]="form.controls.status">
+            <mat-option *ngFor="let status of statuses" [value]="status.value">{{ status.value }}</mat-option>
+          </mat-select>
+          <mat-error
+            *ngIf="
+                  form.controls.status.dirty || form.controls.status.touched
+                  "
+          >
+                  <span *ngIf="form.controls.status?.hasError('required')"
+                  >Status is <strong>required</strong></span
+                  >
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="teams-group" *ngIf="action === 'Create'">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Home team</mat-label>
+          <mat-select [formControl]="form.controls.homeTeam">
+            <mat-option *ngFor="let team of selectTeams$ | async" [value]="team">{{ team.name }}</mat-option>
+          </mat-select>
+          <mat-error
+            *ngIf="
+                   form.controls.homeTeam.dirty ||form.controls.homeTeam.touched
+                  "
+          >
+                  <span *ngIf="form.controls.homeTeam.hasError('required')"
+                  >Home team is <strong>required</strong></span
+                  >
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Away Team</mat-label>
+          <mat-select [formControl]="form.controls.awayTeam">
+            <mat-option *ngFor="let team of selectTeams$ | async" [value]="team">{{ team.name }}</mat-option>
+          </mat-select>
+          <mat-error
+            *ngIf="
+                   form.controls.awayTeam.dirty ||form.controls.awayTeam.touched
+                  "
+          >
+                  <span *ngIf="form.controls.awayTeam.hasError('required')"
+                  >Away team is <strong>required</strong></span
+                  >
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+
+      <div class="capacity-group">
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Section amount</mat-label>
+          <input matInput type="number" [formControl]="form.controls.sectionCount" step="1" min="1">
+          <mat-error
+            *ngIf="
+                    form.controls.sectionCount.dirty || form.controls.sectionCount.touched
+                  "
+          >
+                  <span *ngIf="form.controls.sectionCount.hasError('required')"
+                  >Section amount is <strong>required</strong></span
+                  >
+            <span *ngIf="form.controls.sectionCount.hasError('min')">Section amount must be bigger</span>
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Row amount</mat-label>
+          <input matInput type="number" [formControl]="form.controls.rowCount" step="1" min="1">
+          <mat-error
+            *ngIf="
+                  form.controls.rowCount.dirty || form.controls.rowCount?.touched
+                  "
+          >
+                  <span *ngIf="form.controls.rowCount?.hasError('required')"
+                  >Row amount is <strong>required</strong></span
+                  >
+            <span *ngIf="form.controls.rowCount?.hasError('min')">Raw amount must be bigger</span>
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Seat amount</mat-label>
+          <input matInput type="number" [formControl]="form.controls.seatCount" step="1" min="1">
+          <mat-error
+            *ngIf="
+                  form.controls.seatCount.dirty || form.controls.seatCount.touched
+                  "
+          >
+                  <span *ngIf="form.controls.seatCount?.hasError('required')"
+                  >Seat amount is <strong>required</strong></span
+                  >
+            <span *ngIf="form.controls.seatCount?.hasError('min')">Seat amount must be bigger</span>
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="button-action-container">
+        <button
+          class="button-primary full-width"
+          mat-raised-button
+          type="submit"
+        >
+          {{ action }}
+        </button>
+      </div>
+    </form>
+  </mat-card-content>
+</mat-card>

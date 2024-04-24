@@ -1,4 +1,4 @@
 import { Directive } from '@angular/core';
 
-@Directive({ selector: '[datamanagerPopUpContent]' })
+@Directive({ selector: '[popUpContent]' })
 export class PopUpContentDirective {}

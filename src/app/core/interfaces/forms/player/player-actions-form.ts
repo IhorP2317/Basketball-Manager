@@ -1,7 +1,7 @@
 import { FormArray, FormControl, FormGroup } from '@angular/forms';
 import { Country } from '@angular-material-extensions/select-country';
 import { Team } from '../../team/team.model';
-import { PlayerExperienceForm } from '../player-experience/player-experience-form';
+import { StaffExperienceForm } from '../staff-experience/staff-experience-form';
 
 export interface PlayerActionsForm {
   id: FormControl<string | null>;
@@ -14,6 +14,6 @@ export interface PlayerActionsForm {
   team: FormControl<Team | null>;
   position: FormControl<string | null>;
   jerseyNumber: FormControl<number | null>;
-  experiences: FormArray<FormGroup<PlayerExperienceForm>>;
+  experiences: FormArray<FormGroup<StaffExperienceForm>>;
   avatar: FormControl<string | null>;
 }

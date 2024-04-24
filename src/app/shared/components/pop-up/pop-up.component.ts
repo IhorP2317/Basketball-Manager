@@ -12,7 +12,7 @@ import { firstValueFrom } from 'rxjs';
 import { PopUpContentDirective } from '../../directives/pop-up-content.directive';
 
 @Component({
-  selector: 'datamanager-pop-up',
+  selector: 'app-pop-up',
   templateUrl: './pop-up.component.html',
   styleUrl: './pop-up.component.scss',
 })

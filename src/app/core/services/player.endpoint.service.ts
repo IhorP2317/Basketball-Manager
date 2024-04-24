@@ -3,12 +3,18 @@ import { HttpClient } from '@angular/common/http';
 import { PagedListConfiguration } from '../interfaces/paged-list/paged-list-configuration.dto';
 import { Observable } from 'rxjs';
 import { PagedList } from '../interfaces/paged-list/paged-list.model';
-import { prepareQueryParameters } from '../helpers/query-parameters.helper';
+import {
+  prepareMatchStatisticQueryParameters,
+  prepareQueryFiltersAndPagingSettings,
+} from '../helpers/query-parameters.helper';
 import { PlayerFiltersDto } from '../interfaces/player/player-filters.dto';
 import { Player } from '../interfaces/player/player.model';
 import { PlayerRequestDto } from '../interfaces/player/player-request.dto';
-import { PlayerUpdateTeamDto } from '../interfaces/player/player-update-team.dto';
+import { StaffUpdateTeamDto } from '../interfaces/staff/staff-update-team.dto';
 import { PlayerUpdateDto } from '../interfaces/player/player-update.dto';
+import { PlayerDetail } from '../interfaces/player/player-detail.model';
+import { TotalPlayerStatisticFiltersDto } from '../interfaces/statistic/total-player-statistic-filters.dto';
+import { TotalAnnuallyPlayerStatistic } from '../interfaces/statistic/total-annually-player-statistic.model';
 
 @Injectable({
   providedIn: 'root',
@@ -23,10 +29,37 @@ export class PlayerEndpointService {
     filters: PlayerFiltersDto,
     pagingSettings: PagedListConfiguration,
   ): Observable<PagedList<Player>> {
-    let params = prepareQueryParameters(filters, pagingSettings);
+    let params = prepareQueryFiltersAndPagingSettings(filters, pagingSettings);
     return this.http.get<PagedList<Player>>(`${this.baseUrl}/players`, {
       params,
     });
+  }
+
+  getPlayerDetail(playerId: string) {
+    return this.http.get<PlayerDetail>(
+      `${this.baseUrl}/players/${playerId}/details`,
+    );
+  }
+
+  getPlayerYears(playerId: string) {
+    return this.http.get<number[]>(
+      `${this.baseUrl}/players/${playerId}/filters/years`,
+    );
+  }
+
+  getAllAnnuallyPlayerStatistic(
+    playerId: string,
+    totalPlayerStatisticFilters: TotalPlayerStatisticFiltersDto,
+  ) {
+    let params = prepareMatchStatisticQueryParameters(
+      totalPlayerStatisticFilters,
+    );
+    return this.http.get<TotalAnnuallyPlayerStatistic[]>(
+      `${this.baseUrl}/players/${playerId}/statistics`,
+      {
+        params,
+      },
+    );
   }
 
   deletePlayer(playerId: string) {
@@ -41,7 +74,7 @@ export class PlayerEndpointService {
     return this.http.put<void>(`${this.baseUrl}/players/${playerId}`, player);
   }
 
-  updatePlayerTeam(playerId: string, player: PlayerUpdateTeamDto) {
+  updatePlayerTeam(playerId: string, player: StaffUpdateTeamDto) {
     return this.http.patch<void>(
       `${this.baseUrl}/players/${playerId}/team`,
       player,
@@ -50,7 +83,6 @@ export class PlayerEndpointService {
 
   updatePlayerAvatar(playerId: string, file: File) {
     const formData = new FormData();
-    console.log(file.name);
     formData.append('picture', file);
 
     return this.http.patch<void>(

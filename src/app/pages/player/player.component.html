@@ -1,0 +1,191 @@
+<div class="player-container" *ngIf="player">
+  <div class="player-head">
+    <h1 class="page-head">Player</h1>
+  </div>
+  <div class="item-list-container">
+    <form [formGroup]="playerStatisticFiltersForm" class="total-annual-player-statistic-container">
+      <mat-card class="player-card">
+        <mat-card-content class="player-card-content">
+          <div class="player-image-container">
+            <div class="jersey-number-container">
+              <div class="jersey-number">{{ player.jerseyNumber }}</div>
+            </div>
+            <img [src]="player.id | playerImageSrc" class="player-image" (error)="onError($event)"
+                 [alt]="player.firstName + ' ' + player.lastName">
+          </div>
+          <h2 class="player-name">{{ player.firstName }} {{ player.lastName }}</h2>
+          <p class="player-details">
+            <span>{{ player.dateOfBirth | date: 'longDate' }}</span> ·
+            <span>{{ player.country }}</span> ·
+            <span>{{ player.position }}</span>
+          </p>
+          <div class="player-parameters">
+            <div class="height-weight">
+              <span class="height">{{ player.height + ' m' }}</span> ·
+              <span class="weight">{{ player.weight + ' kg' }}</span>
+            </div>
+          </div>
+
+          <div class="app-filters">
+
+            <div class="select-filters">
+              <mat-form-field appearance="fill">
+                <mat-label>Choose a year</mat-label>
+                <mat-select formControlName="year">
+                  <mat-option value="All Time">All Time</mat-option>
+                  <mat-option *ngFor="let year of selectYears$ | async" [value]="year">{{ year }}</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
+          <ng-container *ngIf="playerTotalStatistic$ | async as playerTotalStatistic; else noStatistic">
+            <div class="player-stats">
+              <div class="stat-item">
+                <div
+                  class="stat-value">{{ playerTotalStatistic[playerTotalStatistic.length - 1].points | number:'1.2-2' }}
+                </div>
+                <div class="stat-type">PPG</div>
+              </div>
+              <div class="stat-item">
+                <div
+                  class="stat-value">{{ playerTotalStatistic[playerTotalStatistic.length - 1].offensiveReboundCount | number:'1.2-2' }}
+                </div>
+                <div class="stat-type">ORPG</div>
+              </div>
+              <div class="stat-item">
+                <div
+                  class="stat-value">{{ playerTotalStatistic[playerTotalStatistic.length - 1].defensiveReboundCount | number:'1.2-2' }}
+                </div>
+                <div class="stat-type">DRPG</div>
+              </div>
+              <div class="stat-item">
+                <div
+                  class="stat-value">{{ playerTotalStatistic[playerTotalStatistic.length - 1].assistCount | number:'1.2-2' }}
+                </div>
+                <div class="stat-type">APG</div>
+              </div>
+            </div>
+          </ng-container>
+        </mat-card-content>
+      </mat-card>
+
+      <ng-container *ngIf="playerTotalStatistic$ | async as playerTotalStatistic;">
+        <div class="total-annual-player-statistic-container">
+          <div class="table-headers annual-player-statistic-table-template">
+            <p class="table-header"></p>
+            <p class="table-header">MP</p>
+            <p class="table-header">CT</p>
+            <p class="table-header">PTS</p>
+            <p class="table-header">FT</p>
+            <p class="table-header">2FG</p>
+            <p class="table-header">3FG</p>
+            <p class="table-header">AST</p>
+            <p class="table-header">ORB</p>
+            <p class="table-header">DRB</p>
+            <p class="table-header">STL</p>
+            <p class="table-header">BLK</p>
+            <p class="table-header">TO</p>
+            <p class="table-header">FT%</p>
+            <p class="table-header">2FG%</p>
+            <p class="table-header">3FG%</p>
+          </div>
+          <div class="item-container annual-player-statistic-table-template"
+               *ngFor="let statistic of playerTotalStatistic">
+            <div class="player-year">{{ statistic.year  | totalAnnualStatisticYear }}</div>
+            <div class="player-match-count">{{ statistic.matchCount | number:'1.0-2' }}</div>
+            <div class="player-court-time">{{ statistic.courtTime }}</div>
+            <div class="player-points">{{ statistic.points | number:'1.0-2' }}</div>
+            <div class="player-ft">{{ statistic.onePtShotCount | number:'1.0-2' }}
+              / {{ (statistic.onePtShotCount + statistic.onePtShotMissCount) | number:'1.0-2' }}
+            </div>
+            <div class="player-2fg">{{ statistic.twoPtShotCount  |  number:'1.0-2' }}
+              / {{ (statistic.twoPtShotCount + statistic.twoPtShotMissCount)  |  number:'1.0-2' }}
+            </div>
+            <div class="player-3fg">{{ statistic.threePtShotCount  |  number:'1.0-2' }}
+              / {{ (statistic.threePtShotCount + statistic.threePtShotMissCount) |  number:'1.0-2' }}
+            </div>
+            <div class="player-assists">{{ statistic.assistCount  |  number:'1.0-2' }}</div>
+            <div class="player-offensive-rebounds">{{ statistic.offensiveReboundCount  |  number:'1.0-2' }}</div>
+            <div class="player-defensive-rebounds">{{ statistic.defensiveReboundCount  |  number:'1.0-2' }}</div>
+            <div class="player-steals">{{ statistic.stealCount  |  number:'1.0-2' }}</div>
+            <div class="player-blocks">{{ statistic.blockCount   | number:'1.0-2' }}</div>
+            <div class="player-turnovers">{{ statistic.turnOverCount  |  number:'1.0-2' }}</div>
+            <div class="player-ft-percentage">{{ statistic.onePointShotPercentage | number:'1.0-2' }}</div>
+            <div class="player-2fg-percentage">{{ statistic.twoPointShotPercentage | number:'1.0-2' }}</div>
+            <div class="player-3fg-percentage">{{ statistic.threePointShotPercentage |  number:'1.0-2' }}</div>
+          </div>
+        </div>
+        <div class="chart-container" *ngIf="!hasYear && lineChartData.datasets.length">
+          <div class="chart-area">
+            <p class="page-head"> Total player statistic per year </p>
+            <div class="select-container">
+              <mat-form-field appearance="fill">
+                <mat-label>Statistical parameter</mat-label>
+                <mat-select formControlName="statisticalOption">
+                  <mat-option *ngFor="let option of totalPlayerStatisticOptions" [value]="option.key">
+                    {{ option.display }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <canvas baseChart
+                    class="total-chart-canvas"
+                    [data]="lineChartData"
+                    [plugins]="playerStatisticChartPlugins"
+                    [options]="lineChartOptions"
+                    [type]="'line'"
+                    #totalAnnualPlayerChart>
+            </canvas>
+          </div>
+        </div>
+      </ng-container>
+      <ng-template #noStatistic><p class="main-text dark"> There are not provided statistic for that match with
+        current
+        filters configuration</p></ng-template>
+      <mat-expansion-panel class="player-expansion-panel">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Experiences
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <app-player-experiences-list [playerExperiences]="player.playerExperiences"
+                                     [isAdmin]="isAdminUser"
+                                     (createRequest)="fillCreatePlayerExperienceForm(); createPlayerExperienceDialog.open()"
+                                     (updateRequest)="fillUpdatePlayerExperienceForm($event); editPlayerExperienceDialog.open()"
+                                     (deleteRequest)="onDeletePlayerExperienceClicked($event)"></app-player-experiences-list>
+      </mat-expansion-panel>
+      <mat-expansion-panel class="player-expansion-panel">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Awards
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <app-player-awards-list [playerExperiences]="player.playerExperiences"
+                                [isAdmin]="isAdminUser"
+                                (createRequest)="dialogOpen()"
+                                (deleteRequest)="onDeletePlayerAwardClicked($event)"></app-player-awards-list>
+      </mat-expansion-panel>
+    </form>
+  </div>
+</div>
+<app-pop-up #createPlayerExperienceDialog>
+  <app-create-and-edit-player-experience [form]="playerExperienceActionsForm"
+                                         action="Create"
+                                         (createRequested)="handleCreatePlayerExperience($event)"
+                                         (closed)="createPlayerExperienceDialog.close()"
+                                         *popUpContent></app-create-and-edit-player-experience>
+</app-pop-up>
+<app-pop-up #editPlayerExperienceDialog>
+  <app-create-and-edit-player-experience [form]="playerExperienceActionsForm"
+                                         action="Edit"
+                                         (updateRequested)="handleUpdatePlayerExperience($event)"
+                                         (closed)="editPlayerExperienceDialog.close()"
+                                         *popUpContent></app-create-and-edit-player-experience>
+</app-pop-up>
+<app-pop-up #createAwardDialog>
+  <app-create-award [form]="awardActionsForm"
+                    [experiences]="player.playerExperiences"
+                    (createRequested)="handleCreatePlayerAward($event)"
+                    (closed)="createAwardDialog.close()"
+                    *popUpContent></app-create-award>
+</app-pop-up>

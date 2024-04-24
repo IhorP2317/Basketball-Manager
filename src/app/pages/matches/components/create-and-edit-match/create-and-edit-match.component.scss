@@ -1,0 +1,59 @@
+.match-card {
+  max-width: 800px;
+  margin: 0 auto;
+  border-radius: 4px;
+  text-align: center;
+  padding-top: 20px;
+
+  .match-card-content {
+    .image-container {
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+
+    max-height: calc(100vh - 120px);
+    overflow-y: auto;
+
+    .capacity-group {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 20px;
+    }
+
+    .match-time-group {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 20px;
+    }
+
+
+    .experience-actions {
+      margin-top: 15px;
+    }
+
+    .teams-group {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+
+  }
+}
+
+
+mat-error {
+  font-size: 0.8rem;
+  color: #f44336;
+}
+
+/* Hint text styles */
+mat-hint {
+  font-size: 0.8rem;
+}

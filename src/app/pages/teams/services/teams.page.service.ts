@@ -16,6 +16,10 @@ import { PagedList } from '../../../core/interfaces/paged-list/paged-list.model'
 import { BaseFiltersDto } from '../../../core/interfaces/base-filters.dto';
 import { Team } from '../../../core/interfaces/team/team.model';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
+import { TeamDto } from '../../../core/interfaces/team/team.dto';
+import { HttpErrorResponse } from '@angular/common/http';
+import { AlertService } from '../../../shared/services/alert.service';
+import { ApiErrorHandler } from '../../../core/helpers/api-error-handler.helper';
 
 @UntilDestroy()
 @Injectable()
@@ -38,7 +42,10 @@ export class TeamsPageService {
   public pagedListSettings$ = this.pagedListSettingsSubject.asObservable();
   public pagedListTeams$ = this.pagedListTeamsSubject.asObservable();
 
-  constructor(private teamEndpointService: TeamEndpointService) {
+  constructor(
+    private teamEndpointService: TeamEndpointService,
+    private alertService: AlertService,
+  ) {
     this.onFiltersAndPagingChange();
   }
 
@@ -87,10 +94,49 @@ export class TeamsPageService {
           }
           this.refreshTeams();
         }),
-        catchError((error) => {
-          console.error('Error deleting match:', error);
-          return of(null);
-        }),
+        catchError((response: HttpErrorResponse) =>
+          ApiErrorHandler.handleError(response, this.alertService),
+        ),
+        untilDestroyed(this),
+      )
+      .subscribe();
+  }
+
+  public createTeam(team: TeamDto, teamImage?: File | null | undefined) {
+    this.teamEndpointService
+      .createTeam(team)
+      .pipe(
+        switchMap((team) =>
+          teamImage
+            ? this.teamEndpointService.updateTeamAvatar(team.id, teamImage)
+            : of([]),
+        ),
+        tap(() => this.refreshTeams()),
+        catchError((response: HttpErrorResponse) =>
+          ApiErrorHandler.handleError(response, this.alertService),
+        ),
+        untilDestroyed(this),
+      )
+      .subscribe();
+  }
+
+  public updateTeam(
+    teamId: string,
+    team: TeamDto,
+    teamImage?: File | null | undefined,
+  ) {
+    this.teamEndpointService
+      .updateTeam(teamId, team)
+      .pipe(
+        switchMap(() =>
+          teamImage
+            ? this.teamEndpointService.updateTeamAvatar(teamId, teamImage)
+            : of([]),
+        ),
+        tap(() => this.refreshTeams()),
+        catchError((response: HttpErrorResponse) =>
+          ApiErrorHandler.handleError(response, this.alertService),
+        ),
         untilDestroyed(this),
       )
       .subscribe();

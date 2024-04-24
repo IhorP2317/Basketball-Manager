@@ -1,0 +1,141 @@
+@import '../../../variables.scss';
+
+.head-type {
+  margin-top: 20px;
+}
+
+.match-card {
+  max-width: 800px;
+  margin: 0 auto;
+  border-radius: 4px;
+  text-align: center;
+  padding-top: 20px;
+
+
+  .match-card-content {
+    position: relative;
+
+    .more-options-button {
+      position: absolute;
+      top: 10%;
+      right: 16px;
+      transform: translateY(-50%);
+      width: 48px;
+      height: 48px;
+
+
+      .mat-icon {
+        font-size: 24px;
+        height: 24px;
+        width: 24px;
+        line-height: 24px;
+      }
+    }
+
+
+    .match-head {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      gap: 15px;
+
+
+      .match-date {
+        font-weight: bold;
+        font-size: 18px; // Increased font size for match-date
+      }
+
+      .match-court-info {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        white-space: normal;
+        overflow: hidden;
+        gap: 15px;
+        font-size: 16px;
+
+      }
+
+
+      .match-teams {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        gap: 20px;
+
+        .match-team {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          flex-direction: column;
+          text-align: center;
+          gap: 10px;
+
+          span {
+            white-space: normal;
+            overflow: hidden;
+            font-size: 20px;
+          }
+
+          .match-logo {
+            width: 75px;
+            height: 75px;
+          }
+        }
+
+        .match-versus {
+          font-weight: bold;
+          text-align: center;
+          font-size: 40px;
+        }
+
+        .match-score {
+          font-weight: bold;
+          text-align: center;
+          font-size: 20px;
+        }
+      }
+    }
+  }
+}
+
+.chart-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  padding: 0 20px;
+
+  .select-container {
+    align-self: flex-start;
+    margin-left: 40px;
+    padding-left: 20px;
+  }
+
+  .chart-area {
+    margin-top: 20px;
+    width: 70%;
+    display: flex;
+    gap: 20px;
+    background-color: #FFFFFF;
+
+
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 10px 0;
+    border-radius: $primary-radius;
+
+    .total-chart-canvas {
+    }
+
+    .impact-chart-canvas {
+      width: 400px !important;
+      height: 400px !important;
+    }
+  }
+}
+

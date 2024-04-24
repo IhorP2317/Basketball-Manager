@@ -65,15 +65,17 @@ export class AvatarComponent implements OnInit, ControlValueAccessor {
       const file = files[0];
       const fileUrl = URL.createObjectURL(file);
       this.resetInput();
-      this.openAvatarEditor(fileUrl)
-        .pipe(untilDestroyed(this))
-        .subscribe((croppedFile) => {
-          if (croppedFile) {
-            this.imageUrl = URL.createObjectURL(croppedFile);
-            this.onChange(croppedFile);
-            this.handleFileChange.emit(croppedFile);
-          }
-        });
+      if (this.validateFileInput(file.name)) {
+        this.openAvatarEditor(fileUrl)
+          .pipe(untilDestroyed(this))
+          .subscribe((croppedFile) => {
+            if (croppedFile) {
+              this.imageUrl = URL.createObjectURL(croppedFile);
+              this.onChange(croppedFile);
+              this.handleFileChange.emit(croppedFile);
+            }
+          });
+      }
     }
   }
 
@@ -94,5 +96,19 @@ export class AvatarComponent implements OnInit, ControlValueAccessor {
     if (input) {
       input.value = '';
     }
+  }
+
+  validateFileInput(fileName: string) {
+    let allowedExtensions =
+      /\.(jpe?g|png|ico|gif|bmp|tiff?|jtiff|xbm|svgz?|webp|avif)$/i;
+
+    if (!allowedExtensions.exec(fileName)) {
+      this.alertService.error(
+        'Invalid file type. Please choose a valid image file.',
+      );
+      return false;
+    }
+
+    return true;
   }
 }

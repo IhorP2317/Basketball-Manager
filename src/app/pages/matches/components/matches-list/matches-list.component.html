@@ -11,6 +11,7 @@
     <p class="table-header" *ngIf="isAdmin"></p>
   </div>
   <match-item *ngFor="let match of matches" [match]="match" [isAdmin]="isAdmin"
-              (deleteRequest)="onDeleteRequested($event)"></match-item>
+              (deleteRequest)="onDeleteRequested($event)"
+              (updateRequest)="onUpdateRequested($event)"></match-item>
 </div>
 

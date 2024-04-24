@@ -6,17 +6,17 @@
         <mat-label>Choose a team</mat-label>
         <mat-select [(ngModel)]="selectedTeam" name="team" (selectionChange)="onSelectedTeamChange()">
           <mat-option value="All teams">All teams</mat-option>
-          <mat-option *ngFor="let team of selectTeams | async" [value]="team.name">{{ team.name }}</mat-option>
+          <mat-option *ngFor="let team of selectTeams$ | async" [value]="team.name">{{ team.name }}</mat-option>
         </mat-select>
       </mat-form-field>
       <mat-form-field appearance="fill">
         <mat-label>Choose a year</mat-label>
         <mat-select [(ngModel)]="selectedYear" name="year" (selectionChange)="onSelectYearChange()">
-          <mat-option *ngFor="let year of selectYears | async" [value]="year">{{ year }}</mat-option>
+          <mat-option *ngFor="let year of selectYears$ | async" [value]="year">{{ year }}</mat-option>
         </mat-select>
       </mat-form-field>
     </div>
-    <ng-container *ngIf="filters | async as filters">
+    <ng-container *ngIf="filters$ | async as filters">
       <div class="date-navigation">
         <button mat-icon-button class="month-button" (click)="onPreviousMonthClicked()">
           <mat-icon>chevron_left</mat-icon>
@@ -36,6 +36,7 @@
         aria-label="Create new match"
         class="add-button"
         matTooltip="Create New Match"
+        (click)="fillCreateMatchForm();createMatchDialog.open()"
       >
         <mat-icon>add_circle_outline</mat-icon>
       </button>
@@ -51,14 +52,16 @@
       [listHeader]="'NEXT GAMES'"
       [isAdmin]="isAdminUser()"
       (deleteMatch)="onDeleteMatchClicked($event)"
+      (updateMatch)="fillUpdateMatchForm($event); editMatchDialog.open()"
     ></matches-list>
 
     <matches-list
       *ngIf="(matchesPagedList.items | filterMatches:'Scheduled':true).length > 0"
       [matches]="matchesPagedList.items | filterMatches:'Scheduled':true"
       [listHeader]="'RESULT'"
+      [isAdmin]="isAdminUser()"
       (deleteMatch)="onDeleteMatchClicked($event)"
-
+      (updateMatch)="fillUpdateMatchForm($event); editMatchDialog.open()"
     ></matches-list>
 
     <app-paginator
@@ -75,4 +78,18 @@
     <p class="main-text white">NO GAMES SCHEDULED</p>
   </ng-template>
 </div>
+<app-pop-up #createMatchDialog>
+  <app-create-and-edit-match [form]="matchActionsForm"
+                             action="Create"
+                             (createRequested)="handleCreateMatch($event)"
+                             (closed)="createMatchDialog.close()"
+                             *popUpContent></app-create-and-edit-match>
+</app-pop-up>
+<app-pop-up #editMatchDialog>
+  <app-create-and-edit-match [form]="matchActionsForm"
+                             action="Edit"
+                             (updateRequested)="handleUpdateMatch($event)"
+                             (closed)="editMatchDialog.close()"
+                             *popUpContent></app-create-and-edit-match>
+</app-pop-up>
 

@@ -11,6 +11,7 @@ import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { MatSelectCountryModule } from '@angular-material-extensions/select-country';
 import { AuthInterceptor } from './core/interceptors/auth-interceptor';
 import { PopUpContentDirective } from './shared/directives/pop-up-content.directive';
+import { provideCharts, withDefaultRegisterables } from 'ng2-charts';
 
 @NgModule({
   declarations: [AppComponent],
@@ -38,6 +39,7 @@ import { PopUpContentDirective } from './shared/directives/pop-up-content.direct
       multi: true,
     },
     DatePipe,
+    provideCharts(withDefaultRegisterables()),
   ],
   bootstrap: [AppComponent],
   exports: [PopUpContentDirective],

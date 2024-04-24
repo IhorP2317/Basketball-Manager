@@ -1,0 +1,66 @@
+<div class="coach-container" *ngIf="coach">
+  <div class="coach-head">
+    <h1 class="page-head">{{ (coach.coachStatus | uppercase) + ' COACH' }}</h1>
+  </div>
+  <div class="item-list-container">
+    <mat-card class="coach-card">
+      <mat-card-content class="coach-card-content">
+        <div class="coach-image-container">
+          <img [src]="coach.id | coachImageSrc" class="coach-image" (error)="onError($event)"
+               [alt]="coach.firstName + ' ' + coach.lastName">
+        </div>
+        <h2 class="coach-name">{{ coach.firstName }} {{ coach.lastName }}</h2>
+        <p class="coach-details">
+          <span>{{ coach.dateOfBirth | date: 'longDate' }}</span> ·
+          <span>{{ coach.country }}</span> ·
+          <span>{{ coach.specialty }}</span>
+        </p>
+      </mat-card-content>
+    </mat-card>
+    <mat-expansion-panel class="coach-expansion-panel">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Experiences
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <app-coach-experiences-list [coachExperiences]="coach.coachExperiences"
+                                  [isAdmin]="isAdminUser"
+                                  (updateRequest)="fillUpdateCoachExperienceForm($event); editCoachExperienceDialog.open();"
+                                  (createRequest)="fillCreateCoachExperienceForm(); createCoachExperienceDialog.open()"
+                                  (deleteRequest)="onDeleteCoachExperienceClicked($event)"></app-coach-experiences-list>
+    </mat-expansion-panel>
+    <mat-expansion-panel class="coach-expansion-panel">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Awards
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <app-coach-awards-list [coachExperiences]="coach.coachExperiences" [isAdmin]="isAdminUser"
+                             (createRequest)="dialogOpen()"
+                             (deleteRequest)="onDeleteCoachAwardClicked($event)"></app-coach-awards-list>
+    </mat-expansion-panel>
+  </div>
+</div>
+
+<app-pop-up #createCoachExperienceDialog>
+  <app-create-and-edit-coach-experience [form]="coachExperienceActionsForm"
+                                        action="Create"
+                                        (createRequested)="handleCreateCoachExperience($event)"
+                                        (closed)="createCoachExperienceDialog.close()"
+                                        *popUpContent></app-create-and-edit-coach-experience>
+</app-pop-up>
+<app-pop-up #editCoachExperienceDialog>
+  <app-create-and-edit-coach-experience [form]="coachExperienceActionsForm"
+                                        action="Edit"
+                                        (updateRequested)="handleUpdateCoachExperience($event)"
+                                        (closed)="editCoachExperienceDialog.close()"
+                                        *popUpContent></app-create-and-edit-coach-experience>
+</app-pop-up>
+<app-pop-up #createAwardDialog>
+  <app-create-award [form]="awardActionsForm"
+                    [experiences]="coach.coachExperiences"
+                    (createRequested)="handleCreateCoachAward($event)"
+                    (closed)="createAwardDialog.close()"
+                    *popUpContent></app-create-award>
+</app-pop-up>
+

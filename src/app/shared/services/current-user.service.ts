@@ -6,6 +6,8 @@ import { Router } from '@angular/router';
 import {
   BehaviorSubject,
   catchError,
+  distinctUntilChanged,
+  map,
   Observable,
   of,
   tap,
@@ -27,6 +29,12 @@ export class CurrentUserService {
   );
   public currentUser$ = this.currentUserSubject.asObservable();
   public tokensPair$ = this.tokensPairSubject.asObservable();
+  public isAdminOrSuperAdmin$ = this.currentUser$.pipe(
+    map(
+      (user) => user && (user.role === 'Admin' || user.role === 'SuperAdmin'),
+    ),
+    distinctUntilChanged(),
+  );
 
   constructor(
     private router: Router,
@@ -39,7 +47,7 @@ export class CurrentUserService {
   }
 
   isAdminOrSuperAdmin(): boolean {
-    const currentUser = this.getCurrentUser();
+    const currentUser = this.currentUserSubject.value;
     return (
       currentUser != null &&
       (currentUser.role === 'Admin' || currentUser.role === 'SuperAdmin')
@@ -47,7 +55,7 @@ export class CurrentUserService {
   }
 
   refreshToken(): Observable<any> {
-    const currentToken = this.getTokensPair();
+    const currentToken = this.tokensPairSubject.value;
     if (!currentToken) {
       console.error('No current token available for refresh.');
       this.logOut();
@@ -63,7 +71,7 @@ export class CurrentUserService {
         if (error instanceof HttpErrorResponse && error.status === 401) {
           console.log('Session expired. Logging out.');
           this.logOut();
-          return of(null); // Return an observable to indicate the chain can continue
+          return of(null);
         }
         console.error('Error refreshing token:', error);
         return throwError(() => new Error('Error refreshing token'));
@@ -112,8 +120,6 @@ export class CurrentUserService {
 
     const userToDeleteRole = userToRemove.role;
     const currentUserRole = currentUser.role;
-    const currentUserId = currentUser.id;
-    const userToDeleteId = userToRemove.id;
     if (userToDeleteRole.includes('SuperAdmin')) {
       return false;
     }
