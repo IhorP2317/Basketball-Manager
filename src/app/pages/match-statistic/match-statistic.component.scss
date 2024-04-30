@@ -98,6 +98,10 @@
           font-size: 20px;
         }
       }
+
+      .export {
+        padding: 10px;
+      }
     }
   }
 }
@@ -109,11 +113,6 @@
   width: 100%;
   padding: 0 20px;
 
-  .select-container {
-    align-self: flex-start;
-    margin-left: 40px;
-    padding-left: 20px;
-  }
 
   .chart-area {
     margin-top: 20px;
@@ -129,12 +128,16 @@
     padding: 10px 0;
     border-radius: $primary-radius;
 
-    .total-chart-canvas {
+    .select-container {
+      align-self: flex-start;
+      margin-left: 40px;
+      padding-left: 20px;
     }
 
-    .impact-chart-canvas {
-      width: 400px !important;
-      height: 400px !important;
+    .impact-chart-canvas-container {
+      width: 100%;
+      max-width: 600px;
+      aspect-ratio: 1;
     }
   }
 }

@@ -104,7 +104,7 @@
             <div class="player-turnovers">{{ statistic.turnovers }}</div>
           </div>
           <div class="chart-container" *ngIf="hasTeamId">
-            <div class="chart-area">
+            <div class="chart-area ">
               <p class="page-head"> Players Impact</p>
               <div class="select-container">
                 <mat-form-field appearance="fill">
@@ -116,13 +116,19 @@
                   </mat-select>
                 </mat-form-field>
               </div>
-              <canvas baseChart
-                      class="impact-chart-canvas"
-                      [data]="pieChartData"
-                      [options]="pieChartOptions"
-                      [type]="'pie'"
-                      #impactChart>
-              </canvas>
+              <div class="impact-chart-canvas-container">
+                <canvas baseChart
+                        class="impact-chart-canvas"
+                        [data]="pieChartData"
+                        [options]="pieChartOptions"
+                        [type]="'pie'"
+                        #impactChart>
+                </canvas>
+              </div>
+              <button mat-raised-button (click)="onExportStatisticClicked('pie')" class="button-primary export"> Export
+                Statistic to
+                JSON
+              </button>
             </div>
           </div>
         </div>
@@ -137,6 +143,10 @@
                     [type]="'bar'"
                     #totalChart>
             </canvas>
+            <button mat-raised-button (click)="onExportStatisticClicked('bar')" class="button-primary export">Export
+              Statistic to
+              JSON
+            </button>
           </div>
         </div>
       </ng-container>

@@ -1,6 +1,7 @@
 @import '../../../../../variables.scss';
 
 .staff-item-container {
+  min-width: 250px;
   display: flex;
   align-items: center;
   justify-content: center;

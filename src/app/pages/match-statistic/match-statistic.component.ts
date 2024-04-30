@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { CurrentUserService } from '../../shared/services/current-user.service';
+import { saveAs } from 'file-saver';
 import { MatchStatisticPageService } from './services/match-statistic.page.service';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import {
@@ -9,6 +10,7 @@ import {
   EMPTY,
   filter,
   map,
+  Observable,
   of,
   startWith,
   switchMap,
@@ -311,5 +313,28 @@ export class MatchStatisticComponent implements OnInit {
   onError(event: Event, team: 'home' | 'away') {
     (event.target as HTMLImageElement).src =
       `assets/images/${team === 'home' ? 'HomeTeam.png' : 'AwayTeam.png'}`;
+  }
+
+  onExportStatisticClicked(chartType: 'pie' | 'bar') {
+    let statistic$: Observable<
+      PlayerImpactStatisticModel[] | TotalTeamStatisticModel[] | null
+    >;
+
+    if (chartType === 'pie') {
+      statistic$ = this.matchPlayerImpactStatistic$;
+    } else if (chartType === 'bar') {
+      statistic$ = this.totalTeamStatistic$;
+    } else {
+      console.error('No valid chart type selected for export.');
+      return;
+    }
+
+    statistic$
+      .pipe(take(1), untilDestroyed(this))
+      .subscribe((statisticData) => {
+        const jsonData = JSON.stringify(statisticData, null, 2);
+        const blob = new Blob([jsonData], { type: 'application/json' });
+        saveAs(blob, `${chartType}Statistic.json`);
+      });
   }
 }
